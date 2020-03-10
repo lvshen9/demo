@@ -1,0 +1,29 @@
+<?xml version = "1.0" encoding = "UTF-8"?><!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD com.example.Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lvshen.demo.member.mapper.MemberMapper">
+    <resultMap id="result" type="com.lvshen.demo.member.entity.Member">
+        <result property="name" column="name"/>
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+    </resultMap>
+
+    <select id="listMember" resultMap="result">
+		SELECT * FROM member
+	</select>
+
+    <select id="listByName" resultMap="result">
+		SELECT * FROM member where name=#{name}
+	</select>
+
+    <insert id="createMember" parameterType="com.lvshen.demo.member.entity.Member" keyProperty="id"
+            useGeneratedKeys="true">
+		INSERT INTO member (id,name,code) VALUES (#{id, jdbcType=VARCHAR}, #{name, jdbcType=VARCHAR},#{code})
+	</insert>
+
+    <delete id="deleteById" parameterType="String">
+		delete from member where id=#{id}
+	</delete>
+    <update id="updateMember" parameterType="com.lvshen.demo.member.entity.Member">
+	update user set member.name=#{name},member.code=#{code} where member.id=#{id}
+	</update>
+</mapper>
