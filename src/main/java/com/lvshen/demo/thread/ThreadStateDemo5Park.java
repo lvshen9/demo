@@ -14,9 +14,7 @@ public class ThreadStateDemo5Park {
 
     public static void main(String[] args) throws InterruptedException {
 
-        Thread t1 = new Thread(() -> {
-            LockSupport.park();
-        });
+        Thread t1 = new Thread(() -> LockSupport.park());
 
         t1.start();
 
