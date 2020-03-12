@@ -7,7 +7,9 @@ import org.redisson.api.RAtomicLong;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +30,30 @@ public class RedisSpringTest {
     public static final String GET_NEXT_CODE = "get_next_code_spring";
     public static final String HASH_KEY = "hash_key";
 
+    private static final String VALUE_KEY = "value_key";
+    // private static final String HASH_KEY = "hash_key";
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     @Test
     public void testCode() {
         long code = getCode(GET_NEXT_CODE);
         log.info("code:{}",code);
     }
+
+    @Test
+    public void setStringTest() {
+        stringRedisTemplate.opsForValue().set(VALUE_KEY,"I am Lvshen");
+        System.out.println("Test is OK");
+    }
+
+    @Test
+    public void setHashTest() {
+        stringRedisTemplate.opsForHash().put(HASH_KEY,"lvshen","a value that is lvshen");
+        System.out.println("Test is OK");
+    }
+
 
     /**
      * spring原生获取
