@@ -1,8 +1,11 @@
 package com.lvshen.demo.member.entity;
 
+import com.lvshen.demo.annotation.BeanClassTest;
+import com.lvshen.demo.annotation.NeedSetValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Transient;
 
 /**
  * Description:
@@ -19,4 +22,8 @@ public class Member {
     private String id;
     private String name;
     private Integer code;
+
+    @Transient
+    @NeedSetValue(beanClass = BeanClassTest.class, param = "code", method = "getMemberByCode", targetFiled = "name")
+    private String annotationParam;
 }
