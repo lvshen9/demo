@@ -3,6 +3,7 @@ package com.lvshen.demo.member.service;
 import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.member.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class MemberService {
     @Autowired
     private MemberMapper memberMapper;
 
+    @Cacheable(value = "member",key = "#name")
     public List<Member> listByName(String name) {
        return memberMapper.listByName(name);
     }

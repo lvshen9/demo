@@ -44,7 +44,7 @@ public class RedisSpringTest {
 
     @Test
     public void setStringTest() {
-        stringRedisTemplate.opsForValue().set(VALUE_KEY,"I am Lvshen");
+        stringRedisTemplate.opsForValue().set(VALUE_KEY,"I am Lvshen9");
         System.out.println("Test is OK");
     }
 

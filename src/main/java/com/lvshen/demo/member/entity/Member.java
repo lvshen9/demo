@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Transient;
 
+import java.io.Serializable;
+
 /**
  * Description:
  *
@@ -18,7 +20,8 @@ import org.springframework.data.annotation.Transient;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class Member implements Serializable {
+
     private String id;
     private String name;
     private Integer code;

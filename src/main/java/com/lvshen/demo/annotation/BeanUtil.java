@@ -1,6 +1,5 @@
 package com.lvshen.demo.annotation;
 
-import io.netty.util.internal.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
