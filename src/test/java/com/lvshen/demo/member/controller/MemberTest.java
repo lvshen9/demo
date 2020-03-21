@@ -3,6 +3,7 @@ package com.lvshen.demo.member.controller;
 import com.lvshen.demo.RedisSpringTest;
 import com.lvshen.demo.arithmetic.snowflake.SnowFlakeGenerator;
 import com.lvshen.demo.member.entity.Member;
+import com.lvshen.demo.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,9 @@ class MemberTest {
 
     @Autowired
     private MemberController memberController;
+
+    @Autowired
+    private MemberService memberService;
 
     @Test
     void deleteById() {
@@ -64,6 +68,13 @@ class MemberTest {
     void listByName() {
         String name = "zhouzhou";
         List<Member> members = memberController.listByName(name);
+        log.info("members:{}",members);
+    }
+
+    @Test
+    void testCache() {
+        String name = "lvshen10";
+        List<Member> members = memberService.listByNameSelfCache(name);
         log.info("members:{}",members);
     }
 }

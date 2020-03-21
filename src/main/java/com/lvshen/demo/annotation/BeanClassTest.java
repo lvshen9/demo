@@ -24,7 +24,7 @@ public class BeanClassTest {
     public Member getMemberByCode(Integer code) {
         Member member = new Member();
         member.setCode(code);
-        member.setName("lvshen" + code);
+        member.setName("自定义注解Test:" + code);
 
         return member;
     }
