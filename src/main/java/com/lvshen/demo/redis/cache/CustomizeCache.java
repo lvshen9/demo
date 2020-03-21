@@ -21,7 +21,7 @@ public @interface CustomizeCache {
 
     String value();
 
-    long expireTimes() default 30000L; //默认过期时间30s
+    long expireTimes() default 120L; //默认过期时间120s
 
     int semaphoreCount() default Integer.MAX_VALUE;  //默认限制线程并发数
 }
