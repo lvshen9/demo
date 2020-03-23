@@ -14,13 +14,17 @@
     <select id="listByName" resultMap="result">
 		SELECT * FROM member where name=#{name}
 	</select>
+    <select id="getMemberById" resultType="com.lvshen.demo.member.entity.Member">
+
+    </select>
+
 
     <insert id="createMember" parameterType="com.lvshen.demo.member.entity.Member" keyProperty="id"
             useGeneratedKeys="true">
 		INSERT INTO member (id,name,code) VALUES (#{id, jdbcType=VARCHAR}, #{name, jdbcType=VARCHAR},#{code})
 	</insert>
 
-    <delete id="deleteById" parameterType="String">
+    <delete id="deleteById" parameterType="java.lang.String">
 		delete from member where id=#{id}
 	</delete>
     <update id="updateMember" parameterType="com.lvshen.demo.member.entity.Member">

@@ -26,4 +26,6 @@ public interface MemberMapper {
 
     int updateMember(Member user);
 
+    Member getMemberById(String id);
+
 }

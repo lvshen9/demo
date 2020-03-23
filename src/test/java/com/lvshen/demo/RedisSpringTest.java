@@ -1,5 +1,6 @@
 package com.lvshen.demo;
 
+import com.lvshen.demo.arithmetic.shorturl.ShortUrlUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.redisson.Redisson;
@@ -45,6 +46,9 @@ public class RedisSpringTest {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private ShortUrlUtil shortUrlUtil;
 
     //模拟布隆过滤器
     @Test
@@ -136,5 +140,13 @@ public class RedisSpringTest {
         singleServerConfig.setPassword("lvshen");
         RedissonClient redissonClient = Redisson.create(config);
         return redissonClient;
+    }
+
+    @Test
+    public void testShortUrl() {
+        String url = "www.goolge.com";
+
+        String shortUrl = shortUrlUtil.getShortUrl(url, ShortUrlUtil.Decimal.D32);
+        System.out.println("短链：" + shortUrl);
     }
 }
