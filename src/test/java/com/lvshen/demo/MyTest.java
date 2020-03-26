@@ -317,16 +317,18 @@ public class MyTest {
         log.info("循环结束");
     }
 
+    Object o = new Object();
     @Test
     public void testBuilder() {
         int a = 10;
-        synchronized (this) {
+        synchronized (o) {
             while (a > 0) {
                 --a;
             }
         }
         System.out.println(a);
     }
+
 
     @Test
     public void testBuilder2() {

@@ -1,5 +1,6 @@
 package com.lvshen.demo.arithmetic.shorturl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -15,13 +16,14 @@ import java.util.concurrent.TimeUnit;
  * @since JDK 1.8
  */
 @Component
+@Slf4j
 public class ShortUrlUtil {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
 
     private static final String SHORT_URL_KEY = "SHORT_URL_KEY";
-    private static final String LOCALHOST = "http://localhost:4444/";
+    private static final String LOCALHOST = "http://t.cn/";
     private static final String SHORT_LONG_PREFIX = "short_long_prefix_";
     private static final String CACHE_KEY_PREFIX = "cache_key_prefix_";
     private static final int CACHE_SECONDS = 1 * 60 * 60;
@@ -47,6 +49,7 @@ public class ShortUrlUtil {
     public String getShortUrl(String longUrl, Decimal decimal) {
         String cache = redisTemplate.opsForValue().get(CACHE_KEY_PREFIX + longUrl);
         if (cache != null) {
+            log.info("从缓存【{}】中获取到：{}",CACHE_KEY_PREFIX + longUrl,cache);
             return LOCALHOST + toOtherBaseString(Long.valueOf(cache), decimal.x);
         }
 

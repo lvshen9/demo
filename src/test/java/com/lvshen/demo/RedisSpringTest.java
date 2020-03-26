@@ -1,6 +1,9 @@
 package com.lvshen.demo;
 
 import com.lvshen.demo.arithmetic.shorturl.ShortUrlUtil;
+import com.lvshen.demo.redis.subscribe.GoodsMessage;
+import com.lvshen.demo.redis.subscribe.Publisher;
+import com.lvshen.demo.redis.subscribe.UserMessage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.redisson.Redisson;
@@ -16,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
 
@@ -49,6 +53,9 @@ public class RedisSpringTest {
 
     @Autowired
     private ShortUrlUtil shortUrlUtil;
+
+    @Autowired
+    private Publisher publisher;
 
     //模拟布隆过滤器
     @Test
@@ -146,7 +153,25 @@ public class RedisSpringTest {
     public void testShortUrl() {
         String url = "www.goolge.com";
 
-        String shortUrl = shortUrlUtil.getShortUrl(url, ShortUrlUtil.Decimal.D32);
+        String shortUrl = shortUrlUtil.getShortUrl(url, ShortUrlUtil.Decimal.D64);
         System.out.println("短链：" + shortUrl);
+    }
+
+    //redis发布订阅 pub/sub
+    @Test
+    public void pushMessage() {
+        UserMessage userMessage = new UserMessage();
+        userMessage.setMsgId(UUID.randomUUID().toString().replace("-",""));
+        userMessage.setUserId("1");
+        userMessage.setUsername("admin");
+        userMessage.setUsername("root");
+        userMessage.setCreateStamp(System.currentTimeMillis());
+        publisher.pushMessage("user",userMessage);
+        GoodsMessage goodsMessage = new GoodsMessage();
+        goodsMessage.setMsgId(UUID.randomUUID().toString().replace("-",""));
+        goodsMessage.setGoodsType("苹果");
+        goodsMessage.setNumber("十箱");
+        goodsMessage.setCreateStamp(System.currentTimeMillis());
+        publisher.pushMessage("goods",goodsMessage);
     }
 }
