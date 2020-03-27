@@ -68,7 +68,7 @@ public class MyDispatcherServlet extends HttpServlet {
     }
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(ServletConfig config) {
         //1.加载配置文件
         doLoadConfig(config.getInitParameter("contextConfigLocation"));
 
@@ -97,7 +97,7 @@ public class MyDispatcherServlet extends HttpServlet {
             }
             String baseUrl = "";
             if (clazz.isAnnotationPresent(MyRequestMapping.class)) {
-                MyRequestMapping requestMapping = (MyRequestMapping) clazz.getAnnotation(MyRequestMapping.class);
+                MyRequestMapping requestMapping = clazz.getAnnotation(MyRequestMapping.class);
                 baseUrl = requestMapping.value();
             }
             for (Method method : clazz.getMethods()) {
@@ -164,7 +164,7 @@ public class MyDispatcherServlet extends HttpServlet {
                     String beanName = toLowerFirstCase(clazz.getSimpleName());
 
                     //2.自定义类名
-                    MyService service = (MyService) clazz.getAnnotation(MyService.class);
+                    MyService service = clazz.getAnnotation(MyService.class);
                     if (!"".equals(service.value())) {
                         beanName = service.value();
                     }
@@ -179,7 +179,7 @@ public class MyDispatcherServlet extends HttpServlet {
                     for (Class<?> aClass : clazz.getInterfaces()) {
                         if (ioc.containsKey(aClass.getName())) {
                             try {
-                                throw new Exception("the beanName is exsits");
+                                throw new Exception("the beanName is exists");
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
