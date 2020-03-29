@@ -1,6 +1,11 @@
 package com.lvshen.demo.postfixcompletion;
 
+import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.treenode.Student;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Description: Postfix Completion 使用
@@ -59,5 +64,12 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        List<Member> members =new ArrayList<>(); //Member.list
+    }
+
+    @Test
+    public void test(){
+        
     }
 }

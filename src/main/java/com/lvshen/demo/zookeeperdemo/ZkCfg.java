@@ -1,8 +1,5 @@
 package com.lvshen.demo.zookeeperdemo;
 
-import com.alibaba.nacos.client.logger.Logger;
-import com.alibaba.nacos.client.logger.LoggerFactory;
-import com.lvshen.demo.distributelock.ZookeeperConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
