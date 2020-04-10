@@ -18,7 +18,7 @@ public class LockSupportDemo {
         t1 = new Thread(() -> {
             while (i < 10) {
                 System.out.println("t1:" + (++i));
-                LockSupport.unpark(t2);
+                LockSupport.unpark(t2);     //t2变为非阻塞
                 LockSupport.park();
             }
         });
