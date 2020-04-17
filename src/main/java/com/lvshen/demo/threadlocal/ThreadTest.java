@@ -35,7 +35,7 @@ public class ThreadTest {
 		threadLocal.set(value);
 	}
 
-	private static String getTlocal() {
+	private static String getTLocal() {
 		return "ThreadLocal保存:" + Thread.currentThread().getName() + " : " + threadLocal.get();
 	}
 
@@ -43,7 +43,7 @@ public class ThreadTest {
 		baseString = value;
 	}
 
-	private static String getBlocal() {
+	private static String getBLocal() {
 		return "Baseocal保存:   " + Thread.currentThread().getName() + " : " + baseString;
 	}
 
@@ -59,7 +59,7 @@ public class ThreadTest {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				System.out.println(getTlocal());
+				System.out.println(getTLocal());
 			}
 		});
 
@@ -67,7 +67,7 @@ public class ThreadTest {
 			@Override
 			public void run() {
 				setTLocal("子线程二保存变量");
-				System.out.println(getTlocal());
+				System.out.println(getTLocal());
 			}
 		});
 
@@ -75,7 +75,7 @@ public class ThreadTest {
 		executorService.execute(thread2);
 
 		setTLocal("主线程保存变量");
-		System.out.println(getTlocal());
+		System.out.println(getTLocal());
 
 		Thread.sleep(1000);
 
@@ -89,7 +89,7 @@ public class ThreadTest {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				System.err.println(getBlocal());
+				System.err.println(getBLocal());
 			}
 		});
 
@@ -97,7 +97,7 @@ public class ThreadTest {
 			@Override
 			public void run() {
 				setBLocal("子线程二保存变量");
-				System.err.println(getBlocal());
+				System.err.println(getBLocal());
 			}
 		});
 
@@ -105,7 +105,7 @@ public class ThreadTest {
 		executorService.execute(thread4);
 
 		setBLocal("主线程保存变量");
-		System.err.println(getBlocal());
+		System.err.println(getBLocal());
 	}
 
 	@Test

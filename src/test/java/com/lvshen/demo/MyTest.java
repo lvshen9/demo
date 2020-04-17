@@ -317,11 +317,11 @@ public class MyTest {
         log.info("循环结束");
     }
 
-    Object o = new Object();
+    //Object o = new Object();
     @Test
     public void testBuilder() {
         int a = 10;
-        synchronized (o) {
+        synchronized (MyTest.class) {
             while (a > 0) {
                 --a;
             }

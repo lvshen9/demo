@@ -12,6 +12,9 @@ public class LazySimpleSingleton {
     private static volatile LazySimpleSingleton instance = null;
 
     private LazySimpleSingleton(){
+        if (instance != null) {
+            throw new RuntimeException("该构造方法禁止获取");
+        }
     }
 
     public static LazySimpleSingleton getInstance() {

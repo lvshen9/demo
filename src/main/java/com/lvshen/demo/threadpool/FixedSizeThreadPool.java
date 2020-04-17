@@ -33,7 +33,6 @@ public class FixedSizeThreadPool {
 
         this.queue = new LinkedBlockingQueue<>(taskSize);
         this.workers = Collections.synchronizedList(new ArrayList<>());
-
         for (int i = 0; i < poolSize; i++) {
             Worker worker = new Worker(this);
             worker.start();

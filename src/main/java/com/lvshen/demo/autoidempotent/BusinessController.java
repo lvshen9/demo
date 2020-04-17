@@ -1,7 +1,7 @@
 package com.lvshen.demo.autoidempotent;
 
 /**
- * Description:
+ * Description:接口幂等测试
  *
  * @author Lvshen
  * @version 1.0
