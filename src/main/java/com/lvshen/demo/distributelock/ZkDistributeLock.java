@@ -64,6 +64,7 @@ public class ZkDistributeLock implements Lock {
 
         if (!tryLock()) {
             //没获得锁，阻塞自己
+            log.info("线程{}没有获得锁，开始阻塞。",Thread.currentThread().getName());
             waitForLock();
             //再次尝试
             lock();
@@ -93,6 +94,7 @@ public class ZkDistributeLock implements Lock {
         }
 
         log.info("锁节点创建成功：{}", lockPath);
+        System.out.println(String.format("锁节点创建成功：{%s}", lockPath));
         return false;
     }
 
@@ -121,6 +123,7 @@ public class ZkDistributeLock implements Lock {
 
             @Override
             public void handleDataDeleted(String s) throws Exception {
+                log.info("收到节点{}被删除了",s);
                 System.out.println(String.format("收到节点[%s]被删除了",s));
                 count.countDown();
             }

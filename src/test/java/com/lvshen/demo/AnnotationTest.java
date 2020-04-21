@@ -1,9 +1,6 @@
 package com.lvshen.demo;
 
 import com.lvshen.demo.annotation.BeanClassTest;
-import com.lvshen.demo.annotation.MemberVO;
-import com.lvshen.demo.distributelock.ZkWatcherService;
-import com.lvshen.demo.distributelock.order.OrderServiceImplWithDisLock;
 import com.lvshen.demo.member.entity.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -14,8 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
 
 /**
  * Description:

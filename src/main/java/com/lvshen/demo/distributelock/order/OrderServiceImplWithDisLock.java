@@ -40,6 +40,7 @@ public class OrderServiceImplWithDisLock implements OrderService {
         }
 
         log.info("当前线程：{}，生成订单编号：{}",Thread.currentThread().getName() , orderCode);
+        System.out.println(String.format("当前线程：{%s}，生成订单编号：{%s}",Thread.currentThread().getName() , orderCode));
         //其他逻辑
 
     }
