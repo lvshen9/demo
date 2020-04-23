@@ -1,9 +1,12 @@
 package com.lvshen.demo;
 
 import com.lvshen.demo.arithmetic.shorturl.ShortUrlUtil;
+import com.lvshen.demo.redis.reentrantlock.RedisDelayingQueue;
+import com.lvshen.demo.redis.reentrantlock.RedisWithReentrantLock;
 import com.lvshen.demo.redis.subscribe.GoodsMessage;
 import com.lvshen.demo.redis.subscribe.Publisher;
 import com.lvshen.demo.redis.subscribe.UserMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.redisson.Redisson;
@@ -16,8 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
@@ -57,6 +58,12 @@ public class RedisSpringTest {
     @Autowired
     private Publisher publisher;
 
+    @Autowired
+    private RedisWithReentrantLock redisWithReentrantLock;
+
+    @Autowired
+    private RedisDelayingQueue<String> delayingQueue;
+
     //模拟布隆过滤器
     @Test
     public void testBit() {
@@ -64,7 +71,7 @@ public class RedisSpringTest {
         int hasValue = Math.abs(userId.hashCode()); //key 做hash运算
         long index = (long) (hasValue % Math.pow(2, 32)); //hash值与数组长度取模
         Boolean bloomFilter = redisTemplate.opsForValue().setBit("user_bloom_filter", index, true);
-        log.info("user_bloom_filter:{}",bloomFilter);
+        log.info("user_bloom_filter:{}", bloomFilter);
     }
 
     //缓存击穿解决方法
@@ -77,7 +84,7 @@ public class RedisSpringTest {
         long index = (long) (hasValue % Math.pow(2, 32)); //hash值与数组长度取模
         Boolean result = redisTemplate.opsForValue().getBit("user_bloom_filter", index);
         if (!result) {
-            log.info("该userId在数据库中不存在：{}",userId);
+            log.info("该userId在数据库中不存在：{}", userId);
             //return null;
         }
         //3.从缓存中获取
@@ -95,6 +102,56 @@ public class RedisSpringTest {
             //5.存入redis
         } finally {
             semaphore.release();
+        }
+
+    }
+
+    //redis可重入锁测试
+    @Test
+    public void testRLock() {
+        String KEY = "r_lock";
+        System.out.println("进入锁" + redisWithReentrantLock.lock(KEY));
+        System.out.println("第二次进入" + redisWithReentrantLock.lock(KEY));
+
+        System.out.println("第一次退出" + redisWithReentrantLock.unlock(KEY));
+        System.out.println("第二次退出" + redisWithReentrantLock.unlock(KEY));
+    }
+
+    //多线程测试
+    @Test
+    public void testRockWithThread() {
+        String key = "r_lock";
+        new Thread(() -> {
+            System.out.println("当前线程：" + Thread.currentThread().getName() + "进入锁" + redisWithReentrantLock.lock(key));
+            System.out.println("当前线程：" + Thread.currentThread().getName() + "第二次进入" + redisWithReentrantLock.lock(key));
+        }).start();
+
+
+        System.out.println("当前线程：" + Thread.currentThread().getName() + "进入锁" + redisWithReentrantLock.lock(key));
+
+
+    }
+
+    //延迟队列测试
+    @Test
+    public void testDelayQueue() {
+        String queueKey = "redis_delay_queue";
+        delayingQueue.setQueueKey(queueKey);
+        Thread producer = new Thread(() -> delayingQueue.delay("I am Lvshe", 10000));
+
+        Thread consumer = new Thread(() -> delayingQueue.loop());
+
+        producer.start();
+        consumer.start();
+
+        try {
+            producer.join();
+
+            Thread.sleep(20000);
+            consumer.interrupt();
+            consumer.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
     }
@@ -126,6 +183,8 @@ public class RedisSpringTest {
      */
     public long getCode(String key) {
         RedissonClient redissonClient = getRedissonClient();
+        /*RLock rLock = redissonClient.getLock(key);
+        rLock.tryLock();*/
 
         RAtomicLong atomicVar = redissonClient.getAtomicLong(key);
         if (!atomicVar.isExists()) {
@@ -161,17 +220,17 @@ public class RedisSpringTest {
     @Test
     public void pushMessage() {
         UserMessage userMessage = new UserMessage();
-        userMessage.setMsgId(UUID.randomUUID().toString().replace("-",""));
+        userMessage.setMsgId(UUID.randomUUID().toString().replace("-", ""));
         userMessage.setUserId("1");
         userMessage.setUsername("admin");
         userMessage.setUsername("root");
         userMessage.setCreateStamp(System.currentTimeMillis());
-        publisher.pushMessage("user",userMessage);
+        publisher.pushMessage("user", userMessage);
         GoodsMessage goodsMessage = new GoodsMessage();
-        goodsMessage.setMsgId(UUID.randomUUID().toString().replace("-",""));
+        goodsMessage.setMsgId(UUID.randomUUID().toString().replace("-", ""));
         goodsMessage.setGoodsType("苹果");
         goodsMessage.setNumber("十箱");
         goodsMessage.setCreateStamp(System.currentTimeMillis());
-        publisher.pushMessage("goods",goodsMessage);
+        publisher.pushMessage("goods", goodsMessage);
     }
 }
