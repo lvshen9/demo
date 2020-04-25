@@ -3,6 +3,8 @@ package com.lvshen.demo.thread.future;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 /**
  * Description:
@@ -15,7 +17,7 @@ import java.util.concurrent.Callable;
 @Slf4j
 public class Test {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         Callable<String> callable = new Callable<String>() {
             @Override
             public String call() throws Exception {
@@ -24,7 +26,9 @@ public class Test {
             }
         };
 
-        MyFutureTask<String> myFutureTask = new MyFutureTask(callable);
+        //MyFutureTask<String> myFutureTask = new MyFutureTask(callable);
+
+        FutureTask<String> myFutureTask = new FutureTask<>(callable);
         new Thread(myFutureTask).start();
 
         System.out.println(String.format("当前线程：[%s],取出的值：[%s]", Thread.currentThread().getName(), myFutureTask.get()));

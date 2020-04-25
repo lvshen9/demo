@@ -1,6 +1,7 @@
 package com.lvshen.demo;
 
 import com.lvshen.demo.arithmetic.shorturl.ShortUrlUtil;
+import com.lvshen.demo.redis.ratelimiter.RateLimiter;
 import com.lvshen.demo.redis.reentrantlock.RedisDelayingQueue;
 import com.lvshen.demo.redis.reentrantlock.RedisWithReentrantLock;
 import com.lvshen.demo.redis.subscribe.GoodsMessage;
@@ -63,6 +64,9 @@ public class RedisSpringTest {
 
     @Autowired
     private RedisDelayingQueue<String> delayingQueue;
+
+
+    private static final String MESSAGE = "{\"code\":\"400\",\"msg\":\"FAIL\",\"desc\":\"触发限流\"}";
 
     //模拟布隆过滤器
     @Test
@@ -232,5 +236,22 @@ public class RedisSpringTest {
         goodsMessage.setNumber("十箱");
         goodsMessage.setCreateStamp(System.currentTimeMillis());
         publisher.pushMessage("goods", goodsMessage);
+    }
+
+    @Test
+    public void test() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println(limitFun());
+        }
+    }
+
+    /**
+     * 10s内限制请求5次
+     * @return
+     */
+    @RateLimiter(key = "ratedemo:1.0.0", limit = 5, expire = 10, message = MESSAGE)
+    private String limitFun() {
+        //System.out.println("正常请求");
+        return "正常请求";
     }
 }
