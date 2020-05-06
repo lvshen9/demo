@@ -9,13 +9,18 @@ package com.lvshen.demo.concurrent;
  * @since JDK 1.8
  */
 public class VolatileVisibilityTest {
-    private static volatile boolean initFlag = false;
+    //private static volatile boolean initFlag = false;
+    private static boolean initFlag = false;
 
     public static void main(String[] args) throws InterruptedException {
         new Thread(() -> {
             System.out.println("waiting data");
             while (!initFlag) {
+                //System.out.println();
+                //里面添加锁共享变量就不会缓存
+                synchronized (VolatileVisibilityTest.class) {
 
+                }
             }
             System.out.println("========success!!!");
         }).start();
