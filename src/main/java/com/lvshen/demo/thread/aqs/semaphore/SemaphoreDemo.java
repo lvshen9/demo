@@ -1,4 +1,4 @@
-package com.lvshen.demo.semaphore;
+package com.lvshen.demo.thread.aqs.semaphore;
 
 import java.util.Random;
 import java.util.concurrent.CyclicBarrier;

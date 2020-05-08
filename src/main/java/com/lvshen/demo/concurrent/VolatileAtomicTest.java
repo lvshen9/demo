@@ -13,7 +13,7 @@ public class VolatileAtomicTest {
 
     public synchronized static void increase() {
         num++;
-    }
+    }  //这里加了锁 上面的num可以不用加volatile,寄存器获取数据直接从主内存中获取。
 
     public static void main(String[] args) throws InterruptedException {
         Thread[] threads = new Thread[10];

@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 public class BioServerTest {
     static ExecutorService threadPool = Executors.newCachedThreadPool();
     public static void main(String[] args) throws IOException {
-        ServerSocket socket = new ServerSocket(8080);
+        ServerSocket socket = new ServerSocket(8082);
 
         while (true) {
             Socket accept = socket.accept();//可能出现阻塞
@@ -25,7 +25,7 @@ public class BioServerTest {
                 byte[] request = new byte[1024];
 
                 accept.getInputStream().read(request);//可能出现阻塞
-
+                Thread.sleep(60000);
                 System.out.println(new String(request));
                 return  request.toString();
             });
