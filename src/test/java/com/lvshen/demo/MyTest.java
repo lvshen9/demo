@@ -345,5 +345,50 @@ public class MyTest {
         System.out.println(a);
     }
 
+    @Test
+    public void testHashMap() {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(2,2);
+        map.put(4,4);
+        map.put(1,1);
+        map.put(3,3);
+
+        map.forEach((key,value) -> {
+            System.out.println(value);
+        });
+
+        System.out.println(map);
+    }
+
+    @Test
+    public void testLinkedHashMap() {
+        Map<Integer, Integer> map = new LinkedHashMap<>();
+        map.put(2,2);
+        map.put(4,4);
+        map.put(1,1);
+        map.put(3,3);
+
+        map.forEach((key,value) -> {
+            System.out.println(value);
+        });
+
+        System.out.println(map);
+    }
+
+    @Test
+    public void testTreeMap() {
+        Map<Integer, Integer> map = new TreeMap<>();
+        map.put(2,2);
+        map.put(4,4);
+        map.put(1,1);
+        map.put(3,3);
+
+        map.forEach((key,value) -> {
+            System.out.println(value);
+        });
+
+        System.out.println(map);
+    }
+
 
 }
