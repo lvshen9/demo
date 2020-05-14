@@ -245,6 +245,12 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
+        <!--session redis-->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.101tec/zkclient -->
         <dependency>
             <groupId>com.101tec</groupId>

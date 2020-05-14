@@ -60,7 +60,7 @@ public class TxTest {
     }
     //二分法查找 时间复杂度最坏为O(logN)
 
-    public static int getIndex(int[] arr, int key) {
+    /*public static int getIndex(int[] arr, int key) {
         int mid = arr.length / 2;
         if (arr[mid] == key) {
             return mid;
@@ -78,7 +78,7 @@ public class TxTest {
             }
         }
         return start;
-    }
+    }*/
 
     //时间复杂度最坏为O(n)
     public static int inset(int a, int[] nums) {
