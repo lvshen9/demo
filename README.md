@@ -56,6 +56,8 @@ public List<Member> listMemberVO(List<Integer> codes) {
 
 #### 项目二：算法
 
+##### 求根号2的值
+
 收录了阿里面试题`com.lvshen.demo.arithmetic.alibabatest`；
 
 ```java
@@ -93,6 +95,8 @@ public class Test1 {
 }
 ```
 
+##### 队列
+
 JDK的队列`com.lvshen.demo.arithmetic.deque`；
 
 ```java
@@ -113,6 +117,8 @@ public void test1() {
     log.info(removeLast);
 }
 ```
+
+##### 抽奖
 
 抽奖算法`com.lvshen.demo.arithmetic.lottery`；
 
@@ -153,6 +159,8 @@ public static int draw(List<Double> giftProbList) {
 }
 ```
 
+##### 最大公约数
+
 最大公约数与最小公倍数算法`com.lvshen.demo.arithmetic.maxCommon`；
 
 ```java
@@ -184,6 +192,8 @@ public void test2() {
 }
 ```
 
+##### 队列解密
+
 队列使用`com.lvshen.demo.arithmetic.queue`；
 
 ```java
@@ -213,6 +223,8 @@ public void test2() {
         System.out.println(list.toString());
 	}
 ```
+
+##### 搜索算法
 
 搜索算法【广度优先与深度优先】`com.lvshen.demo.arithmetic.search`；
 
@@ -271,6 +283,8 @@ private void bfsLoop() {
 }
 ```
 
+##### 长链转短链
+
 Redis长链转短链算法`com.lvshen.demo.arithmetic.shorturl`；
 
 ```Java
@@ -296,6 +310,8 @@ public String getShortUrl(String longUrl, Decimal decimal) {
         System.out.println("短链：" + shortUrl);
     }
 ```
+
+##### 雪花算法
 
 雪花算法`com.lvshen.demo.arithmetic.snowflake`；
 
@@ -342,6 +358,8 @@ public synchronized long next() {
     }
 ```
 
+##### 排序算法
+
 排序算法`com.lvshen.demo.arithmetic.sort`；
 
 ```Java
@@ -369,6 +387,8 @@ public void test1() {
    // printArrays(radixSort(array));
 }
 ```
+
+##### 回文数判断算法
 
 栈使用`com.lvshen.demo.arithmetic.stack`；
 
@@ -408,6 +428,8 @@ private boolean palindromeTest(String param) {
 		System.out.println(palindromeTest(param));
 	}
 ```
+
+##### 订单编号生成算法
 
 订单编号生成算法`com.lvshen.demo.arithmetic.tradno`；
 
@@ -510,6 +532,8 @@ public ServerResponse testIdempotence() {
 
 #### 项目四：Java基础
 
+##### BigDecimal
+
 BigDecimal使用`com.lvshen.demo.bigdecimal`；
 
 ```Java
@@ -528,6 +552,8 @@ public void test(){
     System.out.println(bigDecimal3);
 }
 ```
+
+##### CAS
 
 CAS使用：`com.lvshen.demo.cas`；
 
@@ -564,6 +590,8 @@ public class MyAtomicInteger {
 }
 ```
 
+##### volatile
+
 volatile使用：`com.lvshen.demo.concurrent`；
 
 ```Java
@@ -599,6 +627,8 @@ public class VolatileVisibilityTest {
     }
 }
 ```
+
+##### Date
 
 日期处理：`com.lvshen.demo.date`；
 
