@@ -834,7 +834,7 @@ public void lock() {
 
 #### 项目十四：NIO demo `com.lvshen.demo.nio`；
 
-> 见博客文章：[[BIO与NIO与多路复用](https://lvshen9.gitee.io/2020/05/07/1/)]
+> 见博客文章：[BIO与NIO与多路复用](https://lvshen9.gitee.io/2020/05/07/1/)
 
 #### 项目十五：Postfix Completion 使用 `com.lvshen.demo.postfixcompletion`；
 
@@ -932,13 +932,287 @@ public void init(ServletConfig config) {
 
 #### 项目十九：Thread多线程`com.lvshen.demo.test`；
 
-AQS，线程状态，手写future类，LockSupport使用
+##### AQS
+
+###### `Semaphone`
+
+```java
+public class SemaphoreDemo {
+    public static void main(String[] args) {
+        SemaphoreDemo semaphoreDemo = new SemaphoreDemo();
+        int count = 9;    //数量
+
+        //循环屏障
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(count);
+
+        Semaphore semaphore = new Semaphore(5);//限制请求数量
+        for (int i = 0; i < count; i++) {
+            String vipNo = "vip-00" + i;
+            new Thread(() -> {
+                try {
+                    cyclicBarrier.await();
+                    //semaphore.acquire();//获取令牌
+                    boolean tryAcquire = semaphore.tryAcquire(3000L, TimeUnit.MILLISECONDS);
+                    if (!tryAcquire) {
+                        System.out.println("获取令牌失败：" + vipNo);
+                    }
+
+                    //执行操作逻辑
+                    System.out.println("当前线程：" + Thread.currentThread().getName());
+                    semaphoreDemo.service(vipNo);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    semaphore.release();
+                }
+            }).start();
+        }
+
+    }
+
+    // 限流控制5个线程同时访问
+    public void service(String vipNo) throws InterruptedException {
+        System.out.println("楼上出来迎接贵宾一位，贵宾编号" + vipNo + ",...");
+        Thread.sleep(new Random().nextInt(3000));
+        System.out.println("欢送贵宾出门，贵宾编号" + vipNo);
+    }
+
+}
+```
+
+###### `CountDownLatch`
+
+```java
+public class CountDownLatchDemo {
+    static final int COUNT = 20;
+
+    static CountDownLatch cdl = new CountDownLatch(COUNT);
+
+    public static void main(String[] args) throws Exception {
+        new Thread(new Teacher(cdl)).start();
+        Thread.sleep(1);
+        for (int i = 0; i < COUNT; i++) {
+            new Thread(new Student(i, cdl)).start();
+        }
+        synchronized (CountDownLatchDemo.class) {
+            CountDownLatchDemo.class.wait();
+        }
+    }
+
+    static class Teacher implements Runnable {
+
+        CountDownLatch cdl;
+
+        Teacher(CountDownLatch cdl) {
+            this.cdl = cdl;
+        }
+
+        @Override
+        public void run() {
+            System.out.println("老师发卷子。。。");
+            try {
+                cdl.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("老师收卷子。。。");
+        }
+
+    }
+
+    static class Student implements Runnable {
+
+        CountDownLatch cdl;
+        int num;
+
+        Student(int num, CountDownLatch cdl) {
+            this.num = num;
+            this.cdl = cdl;
+        }
+
+        @Override
+        public void run() {
+            System.out.println(String.format("学生(%s)写卷子。。。",num));
+            //doingLongTime();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(String.format("学生(%s)写卷子。。。",num));
+            cdl.countDown();
+        }
+
+    }
+}
+```
+
+###### `CyclicBarrier`
+
+```java
+public class CyclicBarrierDemo {
+    static final int COUNT = 5;
+
+    public static void main(String[] args) throws Exception {
+        for (int i = 0; i < COUNT; i++) {
+            new Thread(new Staff(i, cb)).start();
+        }
+        synchronized (CyclicBarrierDemo.class) {
+            CyclicBarrierDemo.class.wait();
+        }
+    }
+
+    static CyclicBarrier cb = new CyclicBarrier(COUNT, new Singer());
+
+    static class Singer implements Runnable {
+
+        @Override
+        public void run() {
+            System.out.println("为大家唱歌。。。");
+        }
+
+    }
+
+    static class Staff implements Runnable {
+
+        CyclicBarrier cb;
+        int num;
+
+        Staff(int num, CyclicBarrier cb) {
+            this.num = num;
+            this.cb = cb;
+        }
+
+        @SneakyThrows
+        @Override
+        public void run() {
+            System.out.println(String.format("员工(%s)出发。。。", num));
+            Thread.sleep(2000);
+            System.out.println(String.format("员工(%s)到达地点一。。。", num));
+            try {
+                cb.await();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(String.format("员工(%s)再出发。。。", num));
+            Thread.sleep(2000);
+            //doingLongTime();
+            System.out.println(String.format("员工(%s)到达地点二。。。", num));
+            try {
+                cb.await();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(String.format("员工(%s)再出发。。。", num));
+            Thread.sleep(2000);
+            //doingLongTime();
+            System.out.println(String.format("员工(%s)到达地点三。。。", num));
+            try {
+                cb.await();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(String.format("员工(%s)结束。。。", num));
+        }
+
+    }
+}
+```
+
+##### 线程状态
+
+##### 手写future类
+
+```java
+public class MyFutureTask<T> implements Runnable {
+
+    Callable<T> callable;
+
+    T result;
+
+    volatile String state = "NEW";
+
+    LinkedBlockingQueue<Thread> queue = new LinkedBlockingQueue<Thread>();
+
+    public MyFutureTask(Callable<T> callable) {
+        this.callable = callable;
+    }
+
+    public T get() {
+        if ("END".equals(state)) {
+            return result;
+        }
+
+        while (!"END".equals(state)) {
+            queue.add(Thread.currentThread());
+            LockSupport.park();
+        }
+        return result;
+    }
+
+    @Override
+    public void run() {
+
+        try {
+            result = callable.call();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            state = "END";
+        }
+
+        Thread th = queue.poll();
+        if (queue != null) {
+            LockSupport.unpark(th);
+            th = queue.poll();
+        }
+    }
+}
+```
+
+##### LockSupport使用
+
+```java
+public class LockSupportDemo {
+    static int i = 0;
+    static Thread t1, t2, t3;
+
+    public static void main(String[] args) {
+        t1 = new Thread(() -> {
+            while (i < 10) {
+                System.out.println("t1:" + (++i));
+                LockSupport.unpark(t2);     //t2变为非阻塞
+                LockSupport.park();
+            }
+        });
+        t2 = new Thread(() -> {
+            while (i < 10) {
+                System.out.println("   t2:" + (++i));
+                LockSupport.unpark(t3);
+                LockSupport.park();
+            }
+        });
+        t3 = new Thread(() -> {
+            while (i < 10) {
+                System.out.println("t3:" + (++i));
+                LockSupport.unpark(t1);
+                LockSupport.park();
+            }
+        });
+
+        t1.start();
+        t2.start();
+        t3.start();
+
+    }
+}
+```
 
 #### 项目二十： 本地线程 `com.lvshen.demo.threadlocal`；
 
 #### 项目二十一：手写线程池 `com.lvshen.demo.threadpool`；
 
-> [[手写线程池](https://lvshen9.gitee.io/2020/04/17/1/)]
+> [手写线程池](https://lvshen9.gitee.io/2020/04/17/1/)
 
 #### 项目二十二：递归实现树状结构 `com.lvshen.demo.treenode`；
 
