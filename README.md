@@ -2,7 +2,7 @@
 
 #### 模块一：自定义注解`com.lvshen.demo.annotation`
 
-注解定义
+##### 注解定义
 
 ```java
 @Retention(RetentionPolicy.RUNTIME)
@@ -16,7 +16,7 @@ public @interface NeedSetValue {
 }
 ```
 
-切面编程实现注解功能
+##### 切面编程实现注解功能
 
 ```java
 @Component
@@ -40,7 +40,7 @@ public class SetFieldValueAspect {
 }
 ```
 
-使用注解
+##### 使用注解
 
 ```java
 @NeedSetValueField
@@ -642,11 +642,109 @@ public Date getDate(String dateStr) throws ParseException {
 
 instanceof使用：`com.lvshen.demo.extendsTest`；
 
+```java
+private void testType(Object o) {
+   if (o instanceof Person) {
+      System.out.println("this is person");
+   } else if (o instanceof Student) {
+      System.out.println("this is student");
+   }
+
+}
+```
+
 Integer使用：`com.lvshen.demo.integer`；
+
+```java
+public class IntegerTest {
+
+   public static void main(String[] args) {
+      // -128--127之间
+
+      Integer i1 = 100;
+      Integer i2 = 100;
+      if (i1 == i2) {
+         System.out.println("i1 == i2");
+      } else {
+         System.out.println("i1 != i2 ");
+      }
+
+      if (i1 < i2) {
+
+        }
+
+      // 大于127
+      Integer i3 = 200;
+      Integer i4 = 200;
+      /*if (i3 == i4) {
+         System.out.println("i3 == i4");
+      } else {
+         System.out.println("i3 != i4 ");   (√)}*/
+
+      /*if (i3.compareTo(i4) == 0) {
+            System.out.println("i3 == i4");    (√)
+      } else {
+            System.out.println("i3 != i4 ");
+        }*/
+
+        if (i3.intValue() == i4.intValue()) {
+            System.out.println("i3 == i4");
+        } else {
+            System.out.println("i3 != i4 ");
+        }
+
+   }
+
+   @Test
+   public void testInteger() {
+      String str = "12";
+      int parseInt = Integer.parseInt(str);
+      Integer valueOf = Integer.valueOf(str);
+      System.out.println("parseInt" + parseInt);
+      System.out.println("valueOf" + valueOf);
+   }
+}
+```
 
 地址传递与值传递：`com.lvshen.demo.javafoundation`；
 
+```java
+/**
+ * 基本数据类型：值传递
+ */
+@Test
+public void test() {
+   int x = 10;
+   int y = 20;
+   swap(x, y);
+
+   System.out.println("x[2] = " + x);
+   System.out.println("y[2] = " + y);
+}
+
+/**
+ * 引用数据类型：地址传递（数组）
+ */
+@Test
+public void test2() {
+   int[] a = { 10, 20 };
+   System.out.println("a[0] :" + a[0] + ", a[1] : " + a[1]);
+   swap(a, 0, 1);
+   System.out.println("a[0] :" + a[0] + ", a[1] : " + a[1]);
+}
+```
+
 SecureRandom使用：`com.lvshen.demo.securerandom`；
+
+```java
+@Test
+public void test2() {
+       byte[] bytes = new byte[128];
+       SecureRandom secureRandom = new SecureRandom();
+       secureRandom.setSeed(System.currentTimeMillis());
+       secureRandom.nextBytes(bytes);
+   }
+```
 
 StringBuilder使用：`com.lvshen.demo.stringbuildertest`；
 
@@ -727,7 +825,24 @@ public void lock() {
 
 #### 项目七：excel导出`com.lvshen.demo.export`
 
+```java
+public static void exportExcel(String exportPath) {
+   XSSFWorkbook workbook = new XSSFWorkbook();
+   XSSFSheet sheet = workbook.createSheet("测试");
+   for (int i = 0; i < 9; i++) {
+      sheet.setColumnWidth(i, 4300);
+   }
+   setTitleStyle(sheet, workbook);
+
+   setExcelFooterName("test", 0, workbook);
+   exportOutPutExcel(exportPath, workbook);
+
+}
+```
+
 #### 项目八：Guava使用`com.lvshen.demo.guava.study`
+
+`Optional`，`Collections`，`String`，`Primitives`
 
 #### 项目九：kafka使用`com.lvshen.demo.kafka`
 
@@ -854,13 +969,301 @@ public void lock() {
 
 #### 项目十二：mybatis开发 `com.lvshen.demo.member`；
 
+##### entity
+
+```java
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Member implements Serializable {
+
+    private String id;
+    private String name;
+    private Integer code;
+
+    @Transient
+    @NeedSetValue(beanClass = BeanClassTest.class, param = "code", method = "getMemberByCode", targetFiled = "name")
+    private String annotationParam;
+}
+```
+
+##### mapper
+
+```java
+@Mapper
+public interface MemberMapper {
+
+    List<Member> listByName(String name);
+}
+```
+
+##### service
+
+```java
+@Service
+public class MemberService {
+    @Autowired
+    private MemberMapper memberMapper;
+
+    @Cacheable(value = "member",key = "#name")
+    public List<Member> listByName(String name) {
+       return memberMapper.listByName(name);
+    }
+ }
+```
+
+##### controller
+
+```java
+@RestController
+@RequestMapping(value = "/member", method = {RequestMethod.GET, RequestMethod.POST})
+public class MemberController {
+    @Autowired
+    private MemberService memberService;
+
+    @RequestMapping("/listByName")
+    @ResponseBody
+    public List<Member> listByName(String name) {
+        return memberService.listByName(name);
+    }
+
+}
+```
+
+##### Mapper.xml
+
+```xml
+<mapper namespace="com.lvshen.demo.member.mapper.MemberMapper">
+    <resultMap id="result" type="com.lvshen.demo.member.entity.Member">
+        <result property="name" column="name"/>
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+    </resultMap>
+
+
+    <select id="listByName" resultMap="result">
+      SELECT * FROM member where name=#{name}
+   </select>
+    
+</mapper>
+```
+
 #### 项目十三：redis开发 `com.lvshen.demo.redis`；
 
 缓存注解，延迟队列，分布式锁，限流注解，可重入锁，分布式session，发布订阅
 
+##### 分布式缓存
+
+```java
+@Component
+@Aspect
+@Slf4j
+public class CacheAspect {
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Pointcut("@annotation(com.lvshen.demo.redis.cache.CustomizeCache)")
+    public void cachePointcut() {
+    }
+
+    @Around("cachePointcut()")
+    public Object doCache(ProceedingJoinPoint point) {
+        Object value = null;
+        Semaphore semaphore = null;
+        MethodSignature signature = (MethodSignature) point.getSignature();
+
+        try {
+            //获取方法上注解的类容
+            Method method = point.getTarget().getClass().getMethod(signature.getName(), signature.getMethod().getParameterTypes());
+            CustomizeCache annotation = method.getAnnotation(CustomizeCache.class);
+            String keyEl = annotation.key();
+            String prefix = annotation.value();
+            long expireTimes = annotation.expireTimes();
+            int semaphoreCount = annotation.semaphoreCount();
+
+            //解析SpringEL表达式
+            SpelExpressionParser parser = new SpelExpressionParser();
+            Expression expression = parser.parseExpression(keyEl);
+            StandardEvaluationContext context = new StandardEvaluationContext();
+
+            //添加参数
+            Object[] args = point.getArgs();
+            DefaultParameterNameDiscoverer discoverer = new DefaultParameterNameDiscoverer();
+            String[] parameterNames = discoverer.getParameterNames(method);
+            for (int i = 0; i < parameterNames.length; i++) {
+                context.setVariable(parameterNames[i], args[i].toString());
+            }
+
+            //解析
+            String key = prefix + "::" + expression.getValue(context).toString();
+
+            //判断缓存中是否存在
+            value = redisTemplate.opsForValue().get(key);
+            if (value != null) {
+                log.info("从缓存中读取到值：{}", value);
+                return value;
+            }
+
+            //自定义组件，如：限流，降级。。。
+            //创建限流令牌
+            semaphore = new Semaphore(semaphoreCount);
+            boolean tryAcquire = semaphore.tryAcquire(3000L, TimeUnit.MILLISECONDS);
+            if (!tryAcquire) {
+                //log.info("当前线程【{}】获取令牌失败,等带其他线程释放令牌", Thread.currentThread().getName());
+                throw new RuntimeException(String.format("当前线程【%s】获取令牌失败,等带其他线程释放令牌", Thread.currentThread().getName()));
+            }
+
+            //缓存不存在则执行方法
+            value = point.proceed();
+
+            //同步value到缓存
+            redisTemplate.opsForValue().set(key, value, expireTimes, TimeUnit.SECONDS);
+
+
+        } catch (Throwable t) {
+            t.printStackTrace();
+        } finally {
+            if (semaphore == null) {
+                return value;
+            } else {
+                semaphore.release();
+            }
+        }
+        return value;
+    }
+}
+```
+
+##### 分布式session
+
+```java
+@RequestMapping(value = "/testSession",method = RequestMethod.GET)
+public String testSession(HttpSession session, Model model) {
+    List<Member> members = memberService.listMember();
+    System.out.println("sessionId------>" + session.getId());
+    model.addAttribute("member", JSON.toJSONString(members));
+    session.setAttribute("member",JSON.toJSONString(members));
+    return "hello world";
+}
+```
+
+##### 发布与订阅
+
+```java
+@Service
+public class Publisher {
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    public void pushMessage(String topic, RedisMessage message) {
+        redisTemplate.convertAndSend(topic,message);
+    }
+}
+
+
+@Slf4j
+public class UserReceiver extends AbstractReceiver {
+    @Override
+    public void receiveMessage(Object message) {
+        log.info("接收到用户消息：{}", JSON.toJSONString(message));
+    }
+}
+
+//redis发布订阅 pub/sub
+    @Test
+    public void pushMessage() {
+        UserMessage userMessage = new UserMessage();
+        userMessage.setMsgId(UUID.randomUUID().toString().replace("-", ""));
+        userMessage.setUserId("1");
+        userMessage.setUsername("admin");
+        userMessage.setUsername("root");
+        userMessage.setCreateStamp(System.currentTimeMillis());
+        publisher.pushMessage("user", userMessage);
+        GoodsMessage goodsMessage = new GoodsMessage();
+        goodsMessage.setMsgId(UUID.randomUUID().toString().replace("-", ""));
+        goodsMessage.setGoodsType("苹果");
+        goodsMessage.setNumber("十箱");
+        goodsMessage.setCreateStamp(System.currentTimeMillis());
+        publisher.pushMessage("goods", goodsMessage);
+    }
+```
+
+##### 延迟队列与限流实现
+
 > [Redis实现延迟队列](https://lvshen9.gitee.io/2020/04/23/1/)
 >
 > [用Redis实现接口限流](https://lvshen9.gitee.io/2020/04/25/1/)
+
+##### 可重入锁
+
+```java
+@Component
+public class RedisWithReentrantLock {
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+
+    private static final String REDIS_VALUE = "r_lock";
+
+
+    private ThreadLocal<Map<String, Integer>> lockers = new ThreadLocal<>();
+
+    private boolean _lock(String key) {
+        return redisTemplate.opsForValue().setIfAbsent(key, REDIS_VALUE, 20, TimeUnit.SECONDS);
+    }
+
+    private void _unlock(String key) {
+        redisTemplate.delete(key);
+    }
+
+    private Map<String, Integer> currentLockers() {
+        Map<String, Integer> refs = lockers.get();
+        if (refs != null) {
+            return refs;
+        }
+
+        lockers.set(new HashMap<>());
+        return lockers.get();
+    }
+
+    public boolean lock(String key) {
+        Map<String, Integer> refs = currentLockers();
+        Integer refCnt = refs.get(key);
+        if (refCnt != null) {
+            refs.put(key, refCnt + 1);
+            return true;
+        }
+        boolean ok = this._lock(key);
+        if (!ok) {
+            return false;
+        }
+
+        refs.put(key, 1);
+        return true;
+    }
+
+    public boolean unlock(String key) {
+        Map<String, Integer> refs = currentLockers();
+        Integer refCnt = refs.get(key);
+        if (refCnt == null) {
+            return false;
+        }
+
+        refCnt = refCnt - 1;
+        if ((refCnt > 0)) {
+            refs.put(key, refCnt);
+        } else {
+            refs.remove(key);
+            this._unlock(key);
+        }
+        return true;
+    }
+
+
+}
+```
 
 #### 项目十四：NIO demo `com.lvshen.demo.nio`；
 
@@ -959,6 +1362,39 @@ public void init(ServletConfig config) {
 #### 项目十七： SpringCloud Alibaba使用 `com.lvshen.demo.springcloudalibaba`；
 
 #### 项目十八：面试题 `com.lvshen.demo.test`；
+
+##### 阿里面试题
+
+```
+//评测题目: 三个线程A、B、C，实现一个程序让线程A打印“A”，线程B打印“B”，线程C打印“C”，
+//三个线程输出ABCABCABC......ABC，循环10次“ABC”
+//30分钟
+```
+
+##### 华为面试题
+
+```
+二分查找和冒泡排序
+```
+
+##### 腾讯面试题
+
+```
+/**
+ * Description:给出有序数组(非递减)和闭区间, 找出数组中在区间之内的元素起始位置和结束位置
+ * 输入：
+ * 1. 有序数组[1,1,2,3,4,5,5]
+ * 2. 闭区间[-3,3]
+ * 输出：[0,3]
+ * 解释：在数组中，前4个元素在区间之内，则起始位置为0，结束位置为3
+ * 要求：最坏情况时间复杂度小于O(n)
+ *
+ * @author Lvshen
+ * @version 1.0
+ * @date: 2020/4/27 18:56
+ * @since JDK 1.8
+ */
+```
 
 #### 项目十九：Thread多线程`com.lvshen.demo.test`；
 
@@ -1151,6 +1587,44 @@ public class CyclicBarrierDemo {
 
 ##### 线程状态
 
+##### sleep
+
+```
+sleep -> TIMED_WAITING
+```
+
+
+
+##### join
+
+```
+t2中执行t1.join(5000L)
+t2的状态：TIMED_WAITING
+t2中执行t1.join()
+t2的状态：WAITING
+```
+
+##### synchronized
+
+```
+t1抢不到锁的状态：BLOCKED
+```
+
+##### wait
+
+```
+WATTING || BLOCKING
+```
+
+##### park
+
+```
+t1 park后的状态：WAITING
+t1 unpark后的状态：WAITING
+```
+
+
+
 ##### 手写future类
 
 ```java
@@ -1240,6 +1714,58 @@ public class LockSupportDemo {
 
 #### 项目二十： 本地线程 `com.lvshen.demo.threadlocal`；
 
+```java
+public class ThreadLocalTest {
+
+   private static ThreadLocal<Student> threadLocal = new ThreadLocal<>();
+
+   @Test
+   public void test() {
+      Student student1 = new Student(11, "lvshen");
+      Student student2 = new Student(22, "niumo");
+
+      threadLocal.set(student1);
+      threadLocal.set(student2);
+
+   }
+
+   @Test
+   public void test1() {
+      printAllSlot(16);
+   }
+
+   private static void printAllSlot(int len) {
+      System.out.println("************* len = " + len + " ***************");
+      for (int i = 1; i <= 64; i++) {
+         ThreadLocal<String> local = new ThreadLocal<>();
+         int slot = getSlot(local, len);
+         System.out.print(slot + " ");
+         if (i % len == 0) {
+            System.out.println();
+         }
+      }
+
+   }
+
+   static int getSlot(ThreadLocal<?> t, int len) {
+      int hashCode = getHashCode(t);
+      return hashCode & (len - 1);
+   }
+
+   static int getHashCode(ThreadLocal<?> t) {
+      Field field;
+      try {
+         field = t.getClass().getDeclaredField("threadLocalHashCode");
+         field.setAccessible(true);
+         return (int) field.get(t);
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+      return 0;
+   }
+}
+```
+
 #### 项目二十一：手写线程池 `com.lvshen.demo.threadpool`；
 
 > [手写线程池](https://lvshen9.gitee.io/2020/04/17/1/)
@@ -1248,8 +1774,86 @@ public class LockSupportDemo {
 
 #### 项目二十三：Java8使用 `com.lvshen.demo.yjh.java8`；
 
-LongAddr使用，Lambda表达式，foreach，LocalDate
+> 见博客：[我所用到的Java8](https://lvshen9.gitee.io/2019/08/16/1/)
+
+LongAddr使用
+
+```java
+private LongAdder longAdderVal = new LongAdder();
+longAdderVal.increment();
+```
+
+Lambda表达式，foreach
+
+LocalDate
+
+```Java
+@Test
+public void testLocalDate() {
+   LocalDate localDate = LocalDate.now();
+   LocalTime localTime = LocalTime.of(12, 20);
+   LocalDateTime localDateTime = LocalDateTime.now();
+   OffsetDateTime offsetDateTime = OffsetDateTime.now();
+   ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
+   System.out.println("program execute Successful!!!");
+}
+```
+
+
 
 #### 项目二十四：Zookeeper监听机制使用 `com.lvshen.demo.zookeeperdemo`；
+
+```java
+@Slf4j
+public class WatcherApi implements Watcher {
+    @Override
+    public void process(WatchedEvent watchedEvent) {
+        log.info("【Watcher监听事件】={}",watchedEvent.getState());
+        log.info("【监听路径为】={}",watchedEvent.getPath());
+        log.info("【监听的类型为】={}",watchedEvent.getType()); //  三种监听类型： 创建，删除，更新
+    }
+}
+
+/**
+     * 测试方法  初始化
+     */
+    @PostConstruct
+    public void init() {
+        String path = "/test/lvshen";
+        log.info("【执行初始化测试方法。。。。。。。。。。。。】");
+        //createNode(path, "测试");
+        String value = getData(path, new WatcherApi());
+        log.info("【执行初始化测试方法getData返回值。。。。。。。。。。。。】={}", value);
+
+        // 删除节点出发 监听事件
+        //deleteNode(path);
+
+    }
+    
+    @Bean(name = "zkClient")
+    public ZooKeeper zkClient(){
+        ZooKeeper zooKeeper=null;
+        try {
+            final CountDownLatch countDownLatch = new CountDownLatch(1);
+            //连接成功后，会回调watcher监听，此连接操作是异步的，执行完new语句后，直接调用后续代码
+            //  可指定多台服务地址 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183
+            zooKeeper = new ZooKeeper(connectString, timeout, new Watcher() {
+                @Override
+                public void process(WatchedEvent event) {
+                    if(Event.KeeperState.SyncConnected==event.getState()){
+                        //如果收到了服务端的响应事件,连接成功
+                        countDownLatch.countDown();
+                    }
+                }
+            });
+            countDownLatch.await();
+            log.info("【初始化ZooKeeper连接状态....】={}",zooKeeper.getState());
+
+        }catch (Exception e){
+            log.error("初始化ZooKeeper连接异常....】={}",e);
+        }
+        return  zooKeeper;
+    }
+```
 
 #### 项目二十五：测试类 `test.java.com.lvshen.demo`；
