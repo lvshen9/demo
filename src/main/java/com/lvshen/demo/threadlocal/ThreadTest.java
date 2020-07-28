@@ -28,8 +28,9 @@ public class ThreadTest {
 
 	private volatile long workerIdBits = 8L;
 
-	public static ExecutorService executorService = new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS,
-			new LinkedBlockingQueue<Runnable>());
+	public static ExecutorService executorService
+			= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS,
+			new LinkedBlockingQueue<>());
 
 	private static void setTLocal(String value) {
 		threadLocal.set(value);
@@ -49,18 +50,15 @@ public class ThreadTest {
 
 	public static void main(String[] args) throws InterruptedException {
 
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				setTLocal("子线程一保存变量");
-				try {
-					// 睡眠一秒，模拟在处理某些程序
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				System.out.println(getTLocal());
+		Thread thread = new Thread(() -> {
+			setTLocal("子线程一保存变量");
+			try {
+				// 睡眠一秒，模拟在处理某些程序
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+			System.out.println(getTLocal());
 		});
 
 		Thread thread2 = new Thread(new Runnable() {
@@ -79,26 +77,20 @@ public class ThreadTest {
 
 		Thread.sleep(1000);
 
-		Thread thread3 = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				setBLocal("子线程一保存变量");
-				try {
-					// 睡眠一秒，模拟在处理某些程序
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				System.err.println(getBLocal());
+		Thread thread3 = new Thread(() -> {
+			setBLocal("子线程一保存变量");
+			try {
+				// 睡眠一秒，模拟在处理某些程序
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+			System.err.println(getBLocal());
 		});
 
-		Thread thread4 = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				setBLocal("子线程二保存变量");
-				System.err.println(getBLocal());
-			}
+		Thread thread4 = new Thread(() -> {
+			setBLocal("子线程二保存变量");
+			System.err.println(getBLocal());
 		});
 
 		executorService.execute(thread3);
@@ -109,26 +101,20 @@ public class ThreadTest {
 	}
 
 	@Test
-	public void tetsVolatile() {
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				for (int i = 0; i < 100; i++) {
-					sequenceBits ++;
-					System.out.println(Thread.currentThread().getName() + ":" + sequenceBits);
-				}
+	public void testVolatile() {
+		Thread thread = new Thread(() -> {
+			for (int i = 0; i < 100; i++) {
+				sequenceBits ++;
+				System.out.println(Thread.currentThread().getName() + ":" + sequenceBits);
 			}
 		});
 
 		thread.start();
 
-		Thread thread2 = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				for (int i = 0; i < 100; i++) {
-					sequenceBits ++;
-					System.out.println(Thread.currentThread().getName() + ":" + sequenceBits);
-				}
+		Thread thread2 = new Thread(() -> {
+			for (int i = 0; i < 100; i++) {
+				sequenceBits ++;
+				System.out.println(Thread.currentThread().getName() + ":" + sequenceBits);
 			}
 		});
 

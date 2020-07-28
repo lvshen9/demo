@@ -4,11 +4,9 @@ import com.google.common.collect.Lists;
 import com.lvshen.demo.member.entity.Member;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Description:
@@ -52,22 +50,43 @@ public class Java8Test {
         System.out.println(firstNotNUllMember);
         //list转map
         Map<String, Member> memberMap = members.stream().collect(Collectors.toMap(Member::getId, value -> value, (k1, k2) -> k1));
-        System.out.println(memberMap);
+        System.out.println("list转map" + memberMap);
 
-        //map遍历
+        //map遍历1
         memberMap.forEach((id, member) -> {
             System.out.println("key=" + id +":"+ "value=" + member);
         });
 
+        //map遍历2
+        memberMap.entrySet().stream().forEach(entry -> {
+            System.out.println("entry遍历" + entry.getKey());
+            System.out.println("entry遍历" + entry.getValue());
+        });
+
         //分组统计
         Map<String, Long> countMap = members.stream().collect(Collectors.groupingBy(Member::getName, Collectors.counting()));
-        System.out.println(countMap);
+        System.out.println("分组统计：" + countMap);
 
-        //循环遍历
+        //循环遍历1
         members.forEach(x -> {
             System.out.println("forEach_code:" + x.getCode());
             System.out.println("forEach_name:" + x.getName());
             System.out.println();
         });
+
+        //倒序排序
+        List<Member> reversSortedMembers = members.stream().sorted(Comparator.comparing(Member::getCode).reversed()).collect(Collectors.toList());
+        System.out.println("倒序排序:" + reversSortedMembers);
+
+        //集合添加
+        List<List<Member>> collect = Stream.of(members).collect(Collectors.toList());
+        System.out.println(collect);
+
+        //memberMap.clear();
+
+        List<Integer> numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);
+        numbers.stream().distinct().forEach(System.out::println);
+
+
     }
 }

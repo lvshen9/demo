@@ -49,8 +49,8 @@ public class StringDemo {
 
 	@Test
 	public void testSplitter() {
-		//String content = ",a,b,,,c,";
-		String content = "a,b";
+		String content = ",a,b,,,c,";
+		//String content = "a,b";
 		// java内置的会忽略[尾部]空内容
 		String[] split = content.split(",");
 		System.out.println(Arrays.toString(split));
@@ -69,54 +69,54 @@ public class StringDemo {
 		// 1.获取字符串中数字
 		String str1 = "1mahesh123ff87f";
 		String retainFrom = CharMatcher.DIGIT.retainFrom(str1);
-		System.out.println(retainFrom);
+		System.out.println("1:" +retainFrom);
 
 		// 2.把多个空格替换,并去掉首位的空格
 		String str2 = "     Mahesh     Parashar  ";
 		String collapseFrom = CharMatcher.WHITESPACE.trimAndCollapseFrom(str2, ' ');
-		System.out.println(collapseFrom);
+		System.out.println("2:" +collapseFrom);
 
 		// 3.去掉转义字符(\t,\n,\b...)
 		String str3 = " ab\tcd\nef\bg	a";
 		String removeFrom = CharMatcher.JAVA_ISO_CONTROL.removeFrom(str3);
 		String collapseFrom1 = CharMatcher.WHITESPACE.trimAndCollapseFrom(removeFrom, ' ');
-		System.out.println(collapseFrom1);
+		System.out.println("3:" +collapseFrom1);
 
 		// ★4.把所有的数字用"*"代替
 		String str4 = "124abc85dds";
 		String replaceFrom = CharMatcher.JAVA_DIGIT.replaceFrom(str4, "*");
-		System.out.println(replaceFrom);
+		System.out.println("4:" +replaceFrom);
 
 		// 5.获取所有的数字和小写字母
 		String str5 = "124abc85ddsAF1HNsd";
 		String retainFrom1 = CharMatcher.JAVA_DIGIT.or(CharMatcher.JAVA_LOWER_CASE).retainFrom(str5);
-		System.out.println(retainFrom1);
+		System.out.println("5:" +retainFrom1);
 
 		// 7.获取所有单字节长度的符号
 		String str7 = ",dg,123AH中国";
 		String retainFrom2 = CharMatcher.SINGLE_WIDTH.retainFrom(str7);
-		System.out.println(retainFrom2);
+		System.out.println("7:" +retainFrom2);
 
 		// 8.获取字母
 		String str8 = "FirstName LastName +1 123 456 789 !@#$%^&*()_+|}{:\"?><";
 		String retainFrom3 = CharMatcher.JAVA_LETTER.retainFrom(str8);
-		System.out.println(retainFrom3);
+		System.out.println("8:" +retainFrom3);
 
 		// 9.获取字母和数字
 		String retainFrom4 = CharMatcher.JAVA_LETTER_OR_DIGIT.retainFrom(str8);
-		System.out.println(retainFrom4);
+		System.out.println("9:" +retainFrom4);
 
 		// 10.出现次数统计
 		int count = CharMatcher.ANY.countIn(str8);
-		System.out.println(count);
+		System.out.println("10:" +count);
 
 		// 11.数字出现次数
 		int count1 = CharMatcher.DIGIT.countIn(str8);
-		System.out.println(count1);
+		System.out.println("11:" +count1);
 
 		// 12.获得除小写字母外其他所有字符
 		String retainFrom5 = CharMatcher.JAVA_LOWER_CASE.negate().retainFrom(str8);
-		System.out.println(retainFrom5);
+		System.out.println("12:" +retainFrom5);
 
 
 	}

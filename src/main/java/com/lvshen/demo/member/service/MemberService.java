@@ -34,6 +34,9 @@ public class MemberService {
     }
 
     public List<Member> listMember(){
+        Member member = memberMapper.listMember().get(0);
+        String name = member.getName();
+        System.out.println(name);       //测试
         return memberMapper.listMember();
     }
 
