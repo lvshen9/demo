@@ -10,9 +10,9 @@ package com.lvshen.demo.cas;
  */
 public class MyAtomTest {
     public static void main(String[] args) {
-        Thread[] threads = new Thread[20];
+        Thread[] threads = new Thread[10];
         MyAtomicInteger atomicInteger = new MyAtomicInteger();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             threads[i] = new Thread(() -> {
                 for (int j = 0; j < 1000; j++) {
                     atomicInteger.increment(1);

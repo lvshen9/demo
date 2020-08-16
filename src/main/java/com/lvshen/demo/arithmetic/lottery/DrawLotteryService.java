@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @date: 2019/7/16 9:53
  * @since JDK 1.8
  */
-public class DrawLotteryUtil {
+public class DrawLotteryService {
 	public static int drawGift(List<Gift> giftList) {
 
 		if (null != giftList && giftList.size() > 0) {

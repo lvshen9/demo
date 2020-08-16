@@ -22,42 +22,62 @@ public class Main {
     public static void main(String[] args){
 
         Student student = new Student();//.var
+
         Main.student = new Student();// .filed 全局变量
+
         Student student1 = new Student(); //Student.new
+
         Student student2 = (Student) new Object(); //new Object().castvar
 
-        if (student == null) {  //student.null
+
+        //student.null
+
+        if (student == null) {
 
         }
 
-        if (student != null) { //student.notnull
+
+        //student.notnull
+        if (student != null) {
 
         }
 
         boolean flag = true;
-        if (flag) {   //flag.if
+        //flag.if
+        if (flag) {
 
         }
 
-        while (flag) { //flag.while
+
+          //flag.while
+        while (flag) {
 
         }
 
         System.out.println(flag); //flag.sout
+
+
         //return flag;     flag.return
 
         String[] strs = new String[5];
-        for (int i = 0; i < strs.length; i++) { //strs.fori
+         //strs.fori
+        for (int i = 0; i < strs.length; i++) {
+            
+        }
+
+
+        //strs.for
+        for (String str : strs) {
 
         }
 
-        for (String str : strs) {  //strs.for
+
+        //strs.forr
+        for (int i = strs.length - 1; i >= 0; i--) {
 
         }
 
-        for (int i = strs.length - 1; i >= 0; i--) { //strs.forr
 
-        }
 
         try {
             main(new String[]{});  //main.try
@@ -65,11 +85,14 @@ public class Main {
             e.printStackTrace();
         }
 
+
         List<Member> members =new ArrayList<>(); //Member.list
+
+        List<Student> students =new ArrayList<>();
     }
 
-    @Test
-    public void test(){
-        
+
+    public boolean test(){
+        return true;
     }
 }
