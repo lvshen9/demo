@@ -1,10 +1,7 @@
 package com.lvshen.demo;
 
-import java.util.Collection;
-
-import javax.annotation.Resource;
-
 import com.lvshen.demo.kafka.kafka.producer.KafkaProducer;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +13,8 @@ import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.kafka.listener.adapter.RecordMessagingMessageListenerAdapter;
 import org.springframework.test.context.junit4.SpringRunner;
 
-
-import lombok.extern.slf4j.Slf4j;
+import javax.annotation.Resource;
+import java.util.Collection;
 
 /**
  * Description:
@@ -44,7 +41,7 @@ public class KafkaTest {
 	@Test
 	public void testDemo() throws InterruptedException {
 		log.info("start send");
-		kafkaProducer.send("中文测试222");
+		kafkaProducer.send("I am Lvshen");
 		log.info("end send");
 		// 休眠10秒，为了使监听器有足够的时间监听到topic的数据
 		Thread.sleep(10);

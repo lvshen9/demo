@@ -216,7 +216,7 @@ public class RedisSpringTest {
     public void testShortUrl() {
         String url = "www.google.com";
 
-        String shortUrl = shortUrlUtil.getShortUrl(url, ShortUrlUtil.Decimal.D64);
+        String shortUrl = shortUrlUtil.getShortUrl(url, ShortUrlUtil.Decimal.D32);
         System.out.println("短链：" + shortUrl);
     }
 
