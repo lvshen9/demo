@@ -1,6 +1,7 @@
 package com.lvshen.demo.arithmetic.shorturl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -75,6 +76,15 @@ public class ShortUrlUtil {
         }
         buf[--charPos] = digits[(int) (num % base)];
         return new String(buf, charPos, (32 - charPos));
+    }
+
+    @Test
+    public void testToString() {
+        long n = 568002355;
+        int base = 64;
+        String s = toOtherBaseString(n, base);
+        System.out.println(s);
+
     }
 
 }

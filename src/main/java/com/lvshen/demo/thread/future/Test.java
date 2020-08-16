@@ -18,12 +18,9 @@ import java.util.concurrent.FutureTask;
 public class Test {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        Callable<String> callable = new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                log.info("当前线程：{}", Thread.currentThread().getName());
-                return "Lvshen";
-            }
+        Callable<String> callable = () -> {
+            log.info("当前线程：{}", Thread.currentThread().getName());
+            return "Lvshen";
         };
 
         //MyFutureTask<String> myFutureTask = new MyFutureTask(callable);
