@@ -29,4 +29,8 @@ public class Member implements Serializable {
     @Transient
     @NeedSetValue(beanClass = BeanClassTest.class, param = "code", method = "getMemberByCode", targetFiled = "name")
     private String annotationParam;
+
+    public void viewMember() {
+        System.out.printf("Member测试！！！");
+    }
 }
