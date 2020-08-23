@@ -15,7 +15,6 @@ import java.text.ParseException;
 import java.util.List;
 
 import static com.lvshen.demo.RedisSpringTest.GET_NEXT_CODE;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Description:
@@ -73,7 +72,7 @@ class MemberTest {
 
     @Test
     void testCache() {
-        String name = "lvshen10";
+        String name = "lvshen99";
         List<Member> members = memberService.listByNameSelfCache(name);
         log.info("members:{}",members);
     }

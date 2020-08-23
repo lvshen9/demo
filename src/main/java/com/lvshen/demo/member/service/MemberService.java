@@ -28,7 +28,7 @@ public class MemberService {
        return memberMapper.listByName(name);
     }
 
-    @CustomizeCache(value = "member", key = "#name")
+    @CustomizeCache(value = "member", key = "#name",expireTimes = 3600)
     public List<Member> listByNameSelfCache(String name) {
         return memberMapper.listByName(name);
     }
