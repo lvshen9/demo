@@ -18,7 +18,7 @@ public class StudentDto {
     private String sex;
     private String userName;
 
-    /*@Override
+    @Override
     public String toString() {
         return "StudentDto{" +
                 "id='" + id + '\'' +
@@ -58,5 +58,5 @@ public class StudentDto {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }*/
+    }
 }

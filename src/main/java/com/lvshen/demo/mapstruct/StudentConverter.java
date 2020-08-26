@@ -5,6 +5,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  * Description:
  *
@@ -19,4 +21,6 @@ public interface StudentConverter {
 
     @Mappings(@Mapping(source = "name",target = "userName"))
     StudentDto vo2dto(StudentVo vo);
+
+    List<StudentDto> listVo2dto(List<StudentVo> vos);
 }

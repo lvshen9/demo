@@ -1,6 +1,8 @@
 package com.lvshen.demo.mapstruct;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -11,7 +13,6 @@ import lombok.ToString;
  * @date: 2020-8-21 16:08
  * @since JDK 1.8
  */
-@Data
 public class StudentVo {
     private String id;
     private String name;
@@ -20,7 +21,19 @@ public class StudentVo {
     private String score;
     private String sex;
 
-    /*@Override
+    public StudentVo(String id, String name, String code, String age, String score, String sex) {
+        this.id = id;
+        this.name = name;
+        this.code = code;
+        this.age = age;
+        this.score = score;
+        this.sex = sex;
+    }
+
+    public StudentVo() {
+    }
+
+    @Override
     public String toString() {
         return "StudentVo{" +
                 "id='" + id + '\'' +
@@ -78,5 +91,5 @@ public class StudentVo {
 
     public void setSex(String sex) {
         this.sex = sex;
-    }*/
+    }
 }

@@ -1,6 +1,12 @@
 package com.lvshen.demo.mapstruct;
 
+import com.google.common.collect.Lists;
+import com.lvshen.demo.member.entity.Member;
 import org.springframework.beans.BeanUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Description:
@@ -22,6 +28,23 @@ public class Test {
         return studentVo;
     }
 
+    public List<StudentVo> initVoList() {
+        return Stream.of(
+                new StudentVo("1", "21", "Lvshen1", "001","100","male"),
+                new StudentVo("2", "22", "Lvshen2", "002","100","male"),
+                new StudentVo("3", "23", "Lvshen3", "003","100","male"),
+                new StudentVo("4", "24", "Lvshen4", "004","100","male")
+        ).collect(Collectors.toList());
+
+    }
+    @org.junit.Test
+    public void test() {
+        List<StudentVo> voList = initVoList();
+        List<StudentDto> studentDtos = StudentConverter.INSTANCE.listVo2dto(voList);
+        System.out.println(studentDtos);
+    }
+
+
     @org.junit.Test
     public void test1() {
         StudentVo studentVo = initVo();
@@ -35,6 +58,18 @@ public class Test {
         StudentVo studentVo = initVo();
         StudentDto studentDto = new StudentDto();
         BeanUtils.copyProperties(studentVo,studentDto);
+
+        System.out.println(studentDto);
+    }
+
+    @org.junit.Test
+    public void test3() {
+        StudentVo studentVo = initVo();
+        StudentDto studentDto = new StudentDto();
+        studentDto.setCode(studentVo.getCode());
+        studentDto.setId(studentVo.getId());
+        studentDto.setSex(studentVo.getSex());
+        studentDto.setUserName(studentVo.getName());
 
         System.out.println(studentDto);
     }
