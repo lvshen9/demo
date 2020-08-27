@@ -1,6 +1,5 @@
 package com.lvshen.demo.design.proxy.dynamic;
 
-import com.lvshen.demo.member.entity.Member;
 
 /**
  * Description:
