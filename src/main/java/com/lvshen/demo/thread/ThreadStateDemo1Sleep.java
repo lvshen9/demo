@@ -17,7 +17,7 @@ public class ThreadStateDemo1Sleep {
            try {
                while (running) {
                    System.out.println("t1 running is false,t1将sleep");
-                   Thread.sleep(10000L);
+                   Thread.sleep(3000L);
                }
            } catch (InterruptedException e) {
                e.printStackTrace();
