@@ -10,7 +10,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -95,6 +94,21 @@ public class OptionalTest {
                 new Member("3", "Lvshen3", 30, "知乎：Lvshen"),
                 new Member("4", "Lvshen4", 10, "CSDN：Lvshen")
         ).collect(Collectors.toList());
+    }
+
+    private List<Member> listMemberForOld() {
+        List<Member> list = new ArrayList<>();
+        Member member1 = new Member("1", "Lvshen", 10, "订阅号：Lvshen的技术小屋");
+        Member member2 = new Member("2", "Lvshen2", 20, "头条号：Lvshen的技术小屋");
+        Member member3 = new Member("3", "Lvshen3", 30, "知乎：Lvshen");
+        Member member4 = new Member("4", "Lvshen4", 10, "CSDN：Lvshen");
+
+        list.add(member1);
+        list.add(member2);
+        list.add(member3);
+        list.add(member4);
+
+        return list;
     }
 
     //分组
