@@ -3,7 +3,7 @@ package com.lvshen.demo.thread;
 /**
  * Description:
  *
- * @author yuange
+ * @author lvshen
  * @version 1.0
  * @date: 2020/3/10 18:25
  * @since JDK 1.8
