@@ -1,5 +1,6 @@
 package com.lvshen.demo.member.service;
 
+import com.lvshen.demo.annotation.export.ExportExcel;
 import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.member.mapper.MemberMapper;
 import com.lvshen.demo.redis.cache.CustomizeCache;
@@ -8,7 +9,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Description:
@@ -53,6 +57,16 @@ public class MemberService {
 
     public int updateMember(Member user){
         return memberMapper.updateMember(user);
+    }
+
+    @ExportExcel(beanClass = Member.class)
+    public List<Member> listMemberByAnnotation(HttpServletResponse response) {
+        return Stream.of(
+                new Member("1", "Lvshen", 10, "订阅号：Lvshen的技术小屋"),
+                new Member("2", "Lvshen2", 20, "头条号：Lvshen的技术小屋"),
+                new Member("3", "Lvshen3", 30, "知乎：Lvshen"),
+                new Member("4", "Lvshen4", 10, "CSDN：Lvshen")
+        ).collect(Collectors.toList());
     }
 
 

@@ -16,7 +16,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -68,13 +68,8 @@ public class ExportAspect {
         try {
             XSSFWorkbook workbook = exportExcelByAnnotation(list, aClass);
 
-            response.reset(); // 清除buffer缓存
-            //处理请求
-            response.addHeader("Access-Control-Allow-Origin", "*");
-            response.setCharacterEncoding("utf-8");
-            response.setContentType("application/octet-stream;charset=utf-8");
-            response.addHeader("Content-Disposition", "attachment;filename=" + DateFormatUtils.format(new Date(), "yyyy-MM-dd") + ".xlsx");
-            OutputStream output = response.getOutputStream();
+            OutputStream output = getOutputStream(response);
+            //FileOutputStream output = getOutputStreamForTest();
             workbook.write(output);
             output.close();
         } catch (Exception e) {
@@ -83,8 +78,26 @@ public class ExportAspect {
         }
     }
 
-    // 导出
+    private FileOutputStream getOutputStreamForTest() throws Exception {
+        String exportPositionPath = "E:\\work\\ExportExcel.xlsx";
+        File file = new File(exportPositionPath);
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        //workbook.write(fileOutputStream);
+        log.info("导出成功！！！");
+        return fileOutputStream;
+    }
 
+    private OutputStream getOutputStream(HttpServletResponse response) throws IOException {
+        response.reset(); // 清除buffer缓存
+        //处理请求
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/octet-stream;charset=utf-8");
+        response.addHeader("Content-Disposition", "attachment;filename=" + DateFormatUtils.format(new Date(), "yyyy-MM-dd") + ".xlsx");
+        return response.getOutputStream();
+    }
+
+    // 导出
     public <T> XSSFWorkbook exportExcelByAnnotation(List<T> list, Class<T> relClass) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");//日期类型数据导出格式化
 

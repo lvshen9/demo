@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>嗨！欢迎关注我的博客：Lvshen的技术小屋：</p>
+<table border="1">
+    <tr>
+        <td>姓名</td>
+        <td th:text="${username}"></td>
+    </tr>
+    <tr>
+        <td>性别</td>
+        <td th:text="${sex}"></td>
+    </tr>
+    <tr>
+        <td>爱好</td>
+        <td th:text="${hobby}"></td>
+    </tr>
+</table>
+<div style="color: #ff1a0e">关注我获取Java学习资料哦</div>
+</body>
+</html>

@@ -1,7 +1,5 @@
 package com.lvshen.demo.mapstruct;
 
-import com.google.common.collect.Lists;
-import com.lvshen.demo.member.entity.Member;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
