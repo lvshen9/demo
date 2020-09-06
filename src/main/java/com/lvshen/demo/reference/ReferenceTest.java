@@ -3,7 +3,7 @@ package com.lvshen.demo.reference;
 import java.lang.ref.WeakReference;
 
 /**
- * Description:
+ * Description: 弱引用
  *
  * @author Lvshen
  * @version 1.0
