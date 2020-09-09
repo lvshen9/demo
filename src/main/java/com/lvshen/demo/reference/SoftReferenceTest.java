@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.lang.ref.SoftReference;
 
 /**
- * Description:
+ * Description: 软引用
  *
  * @author Lvshen
  * @version 1.0
