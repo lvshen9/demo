@@ -17,7 +17,7 @@ import java.util.Date;
 public class DateUtils {
 
     public static Date String2Date(String dateStr) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy");
         LocalDateTime localDateTime = LocalDateTime.parse(dateStr, dtf);
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }

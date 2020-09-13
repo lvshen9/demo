@@ -34,7 +34,7 @@ public class ProductInfo {
     private Long workTime;
 
     //出厂时间
-    private Date deliveryDate;
+    private String deliveryDate;
 
     //排放标准
     private String dischargeStandard;
