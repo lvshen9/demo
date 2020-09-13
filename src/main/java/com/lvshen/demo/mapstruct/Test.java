@@ -1,5 +1,7 @@
 package com.lvshen.demo.mapstruct;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.stream.Stream;
 public class Test {
     public StudentVo initVo() {
         StudentVo studentVo = new StudentVo();
-        studentVo.setId("1");
+        studentVo.setId(null);
         studentVo.setAge("27");
         studentVo.setName("Lvshen");
         studentVo.setCode("001");
@@ -55,8 +57,18 @@ public class Test {
     public void test2() {
         StudentVo studentVo = initVo();
         StudentDto studentDto = new StudentDto();
+        studentDto.setId("99");
         BeanUtils.copyProperties(studentVo,studentDto);
+        System.out.println(studentDto);
+    }
 
+    @org.junit.Test
+    public void test5() {
+        StudentVo studentVo = initVo();
+        StudentDto studentDto = new StudentDto();
+        studentDto.setId("99");
+        System.out.println(studentDto);
+        BeanUtil.copyProperties(studentVo,studentDto,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
         System.out.println(studentDto);
     }
 
