@@ -1,10 +1,13 @@
 package com.lvshen.demo.date;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,8 +21,8 @@ import java.util.Date;
  */
 public class DataDemoTes {
 
-	@Test
-	public void test() {
+    @Test
+    public void test() {
         DateEntity dateEntity = new DateEntity();
         Date now = new Date();
         dateEntity.setEndDate(now);
@@ -30,7 +33,7 @@ public class DataDemoTes {
     }
 
     @Test
-    public void test1(){
+    public void test1() {
         DateEntity dateEntity = new DateEntity();
         Calendar calendar = Calendar.getInstance();
         System.out.println("1: " + calendar.getTime().toString());
@@ -46,9 +49,25 @@ public class DataDemoTes {
     }
 
     @Test
-    public void test2() {
+    public void test2() throws ParseException {
         /*Date date = DateTimeUtils.getFormatDate("2019-07-25");
         System.out.println(date);*/
+        //Date date = DateUtils.parseDate("2012", "yyyy");
+        //System.out.println(date);
+
+        long time = Long.parseLong("1599789633000");
+
+        Instant timestamp = Instant.ofEpochMilli(time);
+        ZonedDateTime losAngelesTime = timestamp.atZone(ZoneId.of("GMT+8"));
+        LocalDateTime localDateTime = losAngelesTime.toLocalDateTime();
+        Date date = Date.from(localDateTime.atZone(ZoneOffset.ofHours(8)).toInstant());
+        System.out.println(date);
+
+
+        /*ZoneId zone = ZoneId.of("GMT+8");
+        Instant instant = localDateTime.atZone(zone).toInstant();
+        java.util.Date date1 = Date.from(instant);
+        System.out.println(date1);*/
     }
 
     @Test

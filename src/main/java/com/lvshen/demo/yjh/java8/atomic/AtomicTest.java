@@ -1,5 +1,7 @@
 package com.lvshen.demo.yjh.java8.atomic;
 
+import org.junit.Test;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,11 +22,18 @@ public class AtomicTest {
     private static final int TASK_COUNT = 10;
     private static final int TARGET_COUNT = 100000000;
 
-    private AtomicLong atomicLongVal = new AtomicLong(0);
+    private AtomicLong atomicLongVal = new AtomicLong(1);
     private LongAdder longAdderVal = new LongAdder();
 
     private static CountDownLatch latchForAtomicLong = new CountDownLatch(TASK_COUNT);
     private static CountDownLatch latchForLongAdder = new CountDownLatch(TASK_COUNT);
+
+
+    @Test
+    public void test() {
+        int i = Runtime.getRuntime().availableProcessors();
+        System.out.println(i);
+    }
 
     public class AtomicLongThread implements Runnable {
         protected String name;

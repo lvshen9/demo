@@ -74,4 +74,6 @@ public class ProductInfo {
     //添加id
     private String addId;
 
+    private String code;
+
 }
