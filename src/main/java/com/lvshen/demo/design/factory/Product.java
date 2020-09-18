@@ -9,5 +9,5 @@ package com.lvshen.demo.design.factory;
  * @since JDK 1.8
  */
 public interface Product {
-    public void show();
+    void show();
 }

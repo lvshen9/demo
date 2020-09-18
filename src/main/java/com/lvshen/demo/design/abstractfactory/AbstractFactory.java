@@ -12,5 +12,6 @@ import com.lvshen.demo.design.builder.Product;
  * @since JDK 1.8
  */
 public interface AbstractFactory {
-    public Product product();
+    Product1 newProduct1();
+    Product2 newProduct2();
 }
