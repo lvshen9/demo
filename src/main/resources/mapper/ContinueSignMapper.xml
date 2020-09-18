@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lvshen.demo.member.mapper.ContinueSignMapper">
+  <resultMap id="BaseResultMap" type="com.lvshen.demo.member.entity.ContinueSign">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="continue_counts" jdbcType="INTEGER" property="continueCounts" />
+  </resultMap>
+
+  <select id="listByUserId" resultMap="BaseResultMap">
+		select * from continue_sign where user_id = #{userId}
+	</select>
+  <insert id="insert" parameterType="com.lvshen.demo.member.entity.ContinueSign">
+    insert into continue_sign (id, user_id, continue_counts
+      )
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{continueCounts,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lvshen.demo.member.entity.ContinueSign">
+    insert into continue_sign
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="continueCounts != null">
+        continue_counts,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="continueCounts != null">
+        #{continueCounts,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
