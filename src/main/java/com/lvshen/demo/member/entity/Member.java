@@ -6,6 +6,7 @@ import com.lvshen.demo.annotation.export.ExportFiled;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 
 import java.io.Serializable;
@@ -25,13 +26,14 @@ public class Member implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
     @ExportFiled(number = "1",name = "序号ID")
     private String id;
 
     @ExportFiled(number = "2",name = "姓名")
     private String name;
 
-    @ExportFiled(number = "3",name = "成绩")
+    @ExportFiled(number = "3",name = "编号")
     private Integer code;
 
     @ExportFiled(number = "4",name = "备注说明")

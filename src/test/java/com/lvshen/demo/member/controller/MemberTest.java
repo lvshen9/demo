@@ -3,7 +3,9 @@ package com.lvshen.demo.member.controller;
 import com.lvshen.demo.RedisSpringTest;
 import com.lvshen.demo.arithmetic.snowflake.SnowFlakeGenerator;
 import com.lvshen.demo.member.entity.Member;
+import com.lvshen.demo.member.entity.vo.OrderVo;
 import com.lvshen.demo.member.service.MemberService;
+import com.lvshen.demo.member.service.OrderInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +49,9 @@ class MemberTest {
     private MemberService memberService;
 
     @Autowired
+    private OrderInfoService orderInfoService;
+
+    @Autowired
     private JavaMailSender javaMailSender;
 
     @Autowired
@@ -54,6 +59,18 @@ class MemberTest {
 
     @Test
     void deleteById() {
+    }
+
+    @Test
+    public void testOrderAnnotation() {
+        List<OrderVo> orderVos = orderInfoService.listOrderVoByAnnotation();
+        System.out.println("展示的vo为：" + orderVos);
+    }
+
+    @Test
+    public void testOrder() {
+        List<OrderVo> orderVos = orderInfoService.listOrderVo();
+        log.info("Test is Over!!!");
     }
 
     @Test
