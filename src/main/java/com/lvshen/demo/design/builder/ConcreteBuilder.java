@@ -16,11 +16,11 @@ public class ConcreteBuilder extends Builder {
 
     @Override
     public void buildPartB() {
-        product.setPartA("建造 PartB");
+        product.setPartB("建造 PartB");
     }
 
     @Override
     public void buildPartC() {
-        product.setPartA("建造 PartC");
+        product.setPartC("建造 PartC");
     }
 }

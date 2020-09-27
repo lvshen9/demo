@@ -1,5 +1,6 @@
 package com.lvshen.demo.design.builder;
 
+import cn.hutool.core.lang.Console;
 import lombok.Data;
 
 /**
@@ -16,5 +17,11 @@ public class Product {
     private String partB;
     private String partC;
 
-    public void show(){}
+    public void show(){
+        String partA = getPartA();
+        String partB = getPartB();
+        String partC = getPartC();
+        System.out.println("这可能是东半球最好的产品...");
+        Console.log("组成结构:{},{},{}",partA,partB,partC);
+    }
 }
