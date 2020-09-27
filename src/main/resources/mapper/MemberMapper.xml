@@ -14,8 +14,8 @@
     <select id="listByName" resultMap="result">
 		SELECT * FROM member where name=#{name}
 	</select>
-    <select id="getMemberById" resultType="com.lvshen.demo.member.entity.Member">
-
+    <select id="getMemberById" resultMap="result">
+        SELECT * FROM member where id=#{id}
     </select>
 
 
