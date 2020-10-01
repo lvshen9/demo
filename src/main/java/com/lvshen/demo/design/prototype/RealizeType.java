@@ -8,8 +8,8 @@ package com.lvshen.demo.design.prototype;
  * @date: 2019/12/30 13:45
  * @since JDK 1.8
  */
-public class Realizetype implements Cloneable {
-	public Realizetype() {
+public class RealizeType implements Cloneable {
+	public RealizeType() {
 		System.out.println("具体原型创建成功！");
 	}
 	@Override

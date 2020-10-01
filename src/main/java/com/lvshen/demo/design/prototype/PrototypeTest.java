@@ -13,8 +13,8 @@ import org.junit.Test;
 public class PrototypeTest {
     @Test
     public void test() throws CloneNotSupportedException {
-        Realizetype obj1=new Realizetype();
-        Realizetype obj2=(Realizetype)obj1.clone();
+        RealizeType obj1=new RealizeType();
+        RealizeType obj2=(RealizeType)obj1.clone();
         System.out.println("obj1==obj2?"+(obj1==obj2));
     }
 }

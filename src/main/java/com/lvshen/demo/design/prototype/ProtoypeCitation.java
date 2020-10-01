@@ -1,8 +1,13 @@
 package com.lvshen.demo.design.prototype;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import com.lvshen.demo.member.entity.Member;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+
+import java.util.Date;
 
 /**
  * Description:原型模式，对象拷贝
@@ -15,36 +20,52 @@ import org.junit.Test;
 @Slf4j
 public class ProtoypeCitation {
 
-	@Test
-	public void test() throws CloneNotSupportedException {
-		Citation obj1 = new Citation("张三", "同学：在2016学年第一学期中表现优秀，被评为三好学生。", "韶关学院");
-		obj1.display();
-		Citation obj2 = (Citation) obj1.clone();
-		obj2.setName("李四");
-		obj2.display();
-	}
+    @Test
+    public void test() throws CloneNotSupportedException {
 
-	@Data
-	class Citation implements Cloneable {
-		String name;
-		String info;
-		String college;
+        Member member = new Member();
+        member.setId("1");
+        member.setName("Lvshen");
+        Citation obj1 = new Citation("Lvshen", "同学：在2020学年第一学期中表现优秀，被评为三好学生。", "哈尔滨佛学院", member);
+        System.out.println("1.调用obj1#display....");
+        obj1.display();
+        Citation obj2 = (Citation) obj1.clone();
+        Member member2 = obj2.getMember();
+        System.out.println("2.修改obj2中的数据");
+        member2.setId("100");
+        member2.setName("ZhouZhou");
+        member2.setCode(101);
+        System.out.println("3.调用obj2#display....");
+        obj2.display();
+        System.out.println("4.调用obj1#display....");
+        obj1.display();
+    }
 
-		public Citation(String name, String info, String college) {
-			this.name = name;
-			this.info = info;
-			this.college = college;
-			log.info("Citation创建成功");
-		}
+    @Data
+    class Citation implements Cloneable {
+        String name;
+        String info;
+        String college;
+        Date date;
+        Member member;
 
-		@Override
-		public Object clone() throws CloneNotSupportedException {
-			log.info("拷贝成功");
-			return super.clone();
-		}
+        public Citation(String name, String info, String college, Member member) {
+            this.name = name;
+            this.info = info;
+            this.college = college;
+            this.member = member;
 
-		void display() {
-			log.info(name + info + college);
-		}
-	}
+            log.info("Citation创建成功");
+        }
+
+        @Override
+        public Object clone() throws CloneNotSupportedException {
+            log.info("拷贝成功");
+            return super.clone();
+        }
+
+        void display() {
+            log.info(name + info + college + ",记录对象：" + member);
+        }
+    }
 }
