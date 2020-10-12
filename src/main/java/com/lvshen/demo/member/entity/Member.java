@@ -6,6 +6,7 @@ import com.lvshen.demo.annotation.export.ExportFiled;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 
@@ -43,5 +44,9 @@ public class Member implements Serializable {
 
     public void viewMember() {
         System.out.printf("Member测试！！！");
+    }
+
+    public boolean isMyGirlFriend () {
+        return StringUtils.isNotBlank(this.getName()) && this.getName().equals(this.name);
     }
 }
