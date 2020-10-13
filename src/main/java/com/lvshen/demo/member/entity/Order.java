@@ -1,5 +1,6 @@
 package com.lvshen.demo.member.entity;
 
+import com.lvshen.demo.member.constant.OrderStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,18 @@ public class Order {
      * 下单用户id
      */
     private String memberId;
+
+    /**
+     * 订单状态
+     */
+    private String status;
+
+    /**
+     * 行为：构建一个发货状态的行为
+     * @return
+     */
+    public void buildDeliveryStatus() {
+        this.status = OrderStatusEnum.DELIVERY.name();
+    }
 
 }

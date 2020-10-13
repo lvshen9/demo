@@ -1,6 +1,7 @@
 package com.lvshen.demo.member.service;
 
 import com.lvshen.demo.annotation.NeedSetValueField;
+import com.lvshen.demo.member.constant.OrderStatusEnum;
 import com.lvshen.demo.member.convert.OrderConverter;
 import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.member.entity.Order;
@@ -31,10 +32,10 @@ public class OrderInfoService {
 
     private List<Order> listOrder() {
         return Stream.of(
-                new Order("001", "10"),
-                new Order("002", "11"),
-                new Order("003", "12"),
-                new Order("004", "15")
+                new Order("001", "10", OrderStatusEnum.DELIVERY.name()),
+                new Order("002", "11",OrderStatusEnum.DELIVERY.name()),
+                new Order("003", "12",OrderStatusEnum.DELIVERY.name()),
+                new Order("004", "15",OrderStatusEnum.DELIVERY.name())
         ).collect(Collectors.toList());
     }
 
@@ -63,5 +64,18 @@ public class OrderInfoService {
         log.info("数据库中的数据orderList:{}",orderList);
         //list之间的转换
         return OrderConverter.INSTANCE.listentity2Vo(orderList);
+    }
+
+    /**
+     * 修改订单至发货
+     * @return
+     */
+    public void updateOrderDelivery() {
+        Order order = new Order();
+        order.setId("1");
+        order.setMemberId("001");
+        order.buildDeliveryStatus();
+        //修改方法
+
     }
 }
