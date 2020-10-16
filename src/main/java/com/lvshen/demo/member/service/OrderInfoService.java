@@ -70,10 +70,11 @@ public class OrderInfoService {
      * 修改订单至发货
      * @return
      */
-    public void updateOrderDelivery() {
+    public void updateOrderDelivery(String orderId,String memberId) {
         Order order = new Order();
-        order.setId("1");
-        order.setMemberId("001");
+        order.setId(orderId);
+        order.setMemberId(memberId);
+        //order.setStatus(OrderStatusEnum.DELIVERY.name());
         order.buildDeliveryStatus();
         //修改方法
 

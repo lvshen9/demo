@@ -46,7 +46,7 @@ public class Member implements Serializable {
         System.out.printf("Member测试！！！");
     }
 
-    public boolean isMyGirlFriend () {
-        return StringUtils.isNotBlank(this.getName()) && this.getName().equals(this.name);
+    public boolean isMyGirlFriend (String userName) {
+        return StringUtils.isNotBlank(this.getName()) && this.getName().equals(userName);
     }
 }

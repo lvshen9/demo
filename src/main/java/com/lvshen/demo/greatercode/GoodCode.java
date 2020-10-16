@@ -48,7 +48,7 @@ public class GoodCode {
         }
 
         //-------------
-        if (member.isMyGirlFriend()) {
+        if (member.isMyGirlFriend(userName)) {
             Console.log("我的女朋友是：{}",userName);
         }
     }

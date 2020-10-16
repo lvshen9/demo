@@ -11,7 +11,7 @@ package com.lvshen.demo.design.decorator;
 public class ConcreteComponent implements Component {
 
     public ConcreteComponent() {
-        System.out.println("创建具体构件角色");
+        System.out.println("-------------------");
     }
 
     @Override
