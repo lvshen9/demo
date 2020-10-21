@@ -1,5 +1,9 @@
 package com.lvshen.demo.treenode;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
+
 /**
  * Description:
  *
@@ -11,7 +15,17 @@ package com.lvshen.demo.treenode;
 public class Student {
     private Integer score;
     private String name;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date date;
+
     public Student() {
+    }
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     @Override
@@ -19,6 +33,7 @@ public class Student {
         return "Student{" +
                 "score=" + score +
                 ", name='" + name + '\'' +
+                ", date=" + date +
                 '}';
     }
 

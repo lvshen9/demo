@@ -335,25 +335,25 @@ public class MyTest {
         int a = 10;
         lock.lock();
         try {
-			while (a > 0) {
-				--a;
-			}
+            while (a > 0) {
+                --a;
+            }
 
-		} finally {
-			lock.unlock();
-		}
+        } finally {
+            lock.unlock();
+        }
         System.out.println(a);
     }
 
     @Test
     public void testHashMap() {
         Map<Integer, Integer> map = new HashMap<>();
-        map.put(2,2);
-        map.put(4,4);
-        map.put(1,1);
-        map.put(3,3);
+        map.put(2, 2);
+        map.put(4, 4);
+        map.put(1, 1);
+        map.put(3, 3);
 
-        map.forEach((key,value) -> {
+        map.forEach((key, value) -> {
             System.out.println(value);
         });
 
@@ -363,12 +363,12 @@ public class MyTest {
     @Test
     public void testLinkedHashMap() {
         Map<Integer, Integer> map = new LinkedHashMap<>();
-        map.put(2,2);
-        map.put(4,4);
-        map.put(1,1);
-        map.put(3,3);
+        map.put(2, 2);
+        map.put(4, 4);
+        map.put(1, 1);
+        map.put(3, 3);
 
-        map.forEach((key,value) -> {
+        map.forEach((key, value) -> {
             System.out.println(value);
         });
 
@@ -378,16 +378,25 @@ public class MyTest {
     @Test
     public void testTreeMap() {
         Map<Integer, Integer> map = new TreeMap<>();
-        map.put(2,2);
-        map.put(4,4);
-        map.put(1,1);
-        map.put(3,3);
+        map.put(2, 2);
+        map.put(4, 4);
+        map.put(1, 1);
+        map.put(3, 3);
 
-        map.forEach((key,value) -> {
+        map.forEach((key, value) -> {
             System.out.println(value);
         });
 
         System.out.println(map);
+    }
+
+    @Test
+    public void test9() {
+        Student student = new Student();
+        student.setName("Lvshen");
+        student.setScore(100);
+        student.setDate(new Date());
+        System.out.println(student);
     }
 
 

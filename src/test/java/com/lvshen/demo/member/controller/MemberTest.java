@@ -6,6 +6,7 @@ import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.member.entity.vo.OrderVo;
 import com.lvshen.demo.member.service.MemberService;
 import com.lvshen.demo.member.service.OrderInfoService;
+import com.lvshen.demo.treenode.Student;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -164,5 +165,14 @@ class MemberTest {
         String process = templateEngine.process("thymeleaf-mail.html", context);
         helper.setText(process,true);
         javaMailSender.send(mimeMessage);
+    }
+
+    @Test
+    public void test9() {
+        Student student = new Student();
+        student.setName("Lvshen");
+        student.setScore(100);
+        student.setDate(new Date());
+        System.out.println(student);
     }
 }

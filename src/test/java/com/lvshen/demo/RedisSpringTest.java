@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.redisson.Redisson;
 import org.redisson.api.RAtomicLong;
+import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
@@ -187,8 +188,8 @@ public class RedisSpringTest {
      */
     public long getCode(String key) {
         RedissonClient redissonClient = getRedissonClient();
-        /*RLock rLock = redissonClient.getLock(key);
-        rLock.tryLock();*/
+        RLock rLock = redissonClient.getLock(key);
+        rLock.tryLock();
 
         RAtomicLong atomicVar = redissonClient.getAtomicLong(key);
         if (!atomicVar.isExists()) {
