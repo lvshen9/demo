@@ -142,6 +142,10 @@ public class OptionalTest {
             }
         }
         System.out.println(memberList);
+
+        for (Member member : memberList) {
+
+        }
     }
 
     //过滤来代替删除
