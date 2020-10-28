@@ -18,5 +18,4 @@ public class Facade {
         obj2.method2();
         obj3.method3();
     }
-
 }
