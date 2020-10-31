@@ -1,6 +1,5 @@
 package com.lvshen.demo;
 
-import com.lvshen.demo.arithmetic.shorturl.ShortUrlUtil;
 import com.lvshen.demo.redis.ratelimiter.RateLimiter;
 import com.lvshen.demo.redis.reentrantlock.RedisDelayingQueue;
 import com.lvshen.demo.redis.reentrantlock.RedisWithReentrantLock;
@@ -12,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.redisson.Redisson;
 import org.redisson.api.RAtomicLong;
-import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
@@ -54,8 +52,8 @@ public class RedisSpringTest {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Autowired
-    private ShortUrlUtil shortUrlUtil;
+    //@Autowired
+    //private ShortUrlUtil shortUrlUtil;
 
     @Autowired
     private Publisher publisher;
@@ -188,8 +186,6 @@ public class RedisSpringTest {
      */
     public long getCode(String key) {
         RedissonClient redissonClient = getRedissonClient();
-        RLock rLock = redissonClient.getLock(key);
-        rLock.tryLock();
 
         RAtomicLong atomicVar = redissonClient.getAtomicLong(key);
         if (!atomicVar.isExists()) {
@@ -217,8 +213,8 @@ public class RedisSpringTest {
     public void testShortUrl() {
         String url = "www.google.com";
 
-        String shortUrl = shortUrlUtil.getShortUrl(url, ShortUrlUtil.Decimal.D32);
-        System.out.println("短链：" + shortUrl);
+        //String shortUrl = shortUrlUtil.getShortUrl(url, ShortUrlUtil.Decimal.D32);
+        //System.out.println("短链：" + shortUrl);
     }
 
     //redis发布订阅 pub/sub

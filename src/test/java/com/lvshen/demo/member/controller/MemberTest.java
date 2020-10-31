@@ -1,5 +1,6 @@
 package com.lvshen.demo.member.controller;
 
+import cn.hutool.core.lang.Snowflake;
 import com.lvshen.demo.RedisSpringTest;
 import com.lvshen.demo.arithmetic.snowflake.SnowFlakeGenerator;
 import com.lvshen.demo.member.entity.Member;
@@ -58,8 +59,17 @@ class MemberTest {
     @Autowired
     private TemplateEngine templateEngine;
 
+    @Autowired
+    private Snowflake snowflake;
+
     @Test
     void deleteById() {
+    }
+
+    @Test
+    public void testSnowFlake() {
+        long l = snowflake.nextId();
+        System.out.println(l);
     }
 
     @Test

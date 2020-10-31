@@ -399,5 +399,11 @@ public class MyTest {
         System.out.println(student);
     }
 
+    @Test
+    public void test10() {
+        String uuid = UUID.randomUUID().toString().replaceAll("-","");
+        System.out.println(uuid);
+    }
+
 
 }
