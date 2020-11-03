@@ -18,6 +18,8 @@ import java.util.Date;
 @Builder
 public class ProductInfo {
 
+    private String id;
+
     //来源网站
     private String sourceUrl;
 
@@ -28,7 +30,7 @@ public class ProductInfo {
     private String title;
 
     //价格
-    private BigDecimal price;
+    private String price;
 
     //工作小时
     private Long workTime;
@@ -75,5 +77,7 @@ public class ProductInfo {
     private String addId;
 
     private String code;
+
+    private Date refreshTime;
 
 }

@@ -27,4 +27,27 @@ public class DateUtils {
         java.util.Date nowDate = Date.from(nowInstant);
         return nowDate;
     }
+
+    public static boolean beforeDate(Date currentDate, Date desDate) {
+        if (currentDate.getTime() < desDate.getTime()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean afterDate(Date currentDate, Date desDate) {
+        if (currentDate.getTime() > desDate.getTime()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean betweenDate(Date currentDate, Date startDate,Date endDate) {
+        boolean isAfter = currentDate.getTime() > startDate.getTime() || currentDate.getTime() == startDate.getTime();
+        boolean isBefore = currentDate.getTime() < endDate.getTime() || currentDate.getTime() == endDate.getTime();
+        if (isAfter && isBefore) {
+            return true;
+        }
+        return false;
+    }
 }
