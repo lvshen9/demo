@@ -2,6 +2,8 @@ package com.lvshen.demo;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.lvshen.demo.member.entity.vo.OrderDto;
+import com.lvshen.demo.member.entity.vo.OrderVo;
 import com.lvshen.demo.treenode.Student;
 import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,7 @@ import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.junit.Test;
+import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -403,6 +406,20 @@ public class MyTest {
     public void test10() {
         String uuid = UUID.randomUUID().toString().replaceAll("-","");
         System.out.println(uuid);
+    }
+
+    @Test
+    public void testOrderDto() {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setId("1");
+        orderDto.setMemberId("001");
+        orderDto.setStatus("测试");
+        System.out.println("orderDto: " + orderDto);
+
+        OrderVo orderVo = new OrderVo();
+        BeanUtils.copyProperties(orderDto,orderVo);
+        System.out.println("orderVo: " + orderVo.getStatus());
+
     }
 
 
