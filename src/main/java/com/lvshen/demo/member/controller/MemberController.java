@@ -1,5 +1,7 @@
 package com.lvshen.demo.member.controller;
 
+import com.lvshen.demo.annotation.log.OperationLog;
+import com.lvshen.demo.annotation.log.OperationType;
 import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,13 @@ public class MemberController {
     @ResponseBody
     public List<Member> listByName(String name) {
         return memberService.listByName(name);
+    }
+
+    @RequestMapping("/getById")
+    @ResponseBody
+    @OperationLog(opType = OperationType.QUERY,opBusinessName = "会员服务",opBusinessId = "#id")
+    public Member getById(String id) {
+        return memberService.getById(id);
     }
 
 
