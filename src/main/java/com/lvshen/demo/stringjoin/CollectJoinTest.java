@@ -95,4 +95,10 @@ public class CollectJoinTest {
         System.out.println(Joiner.on("-").join("a", "b", "c", "d"));
         System.out.println(Joiner.on("-").join(Lists.newArrayList("a", "b", "c", "d")));
     }
+
+    @Test
+    public void test7() {
+       String str = "";
+       //str.concat()
+    }
 }
