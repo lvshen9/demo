@@ -1,5 +1,7 @@
 package com.lvshen.demo;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.lvshen.demo.member.entity.vo.OrderDto;
@@ -9,6 +11,7 @@ import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.cookie.BasicClientCookie;
@@ -421,6 +424,40 @@ public class MyTest {
         System.out.println("orderVo: " + orderVo.getStatus());
 
     }
+
+    @Test
+    public void testDateStr() {
+        String today = DateUtil.today();
+        DateTime yesterday = DateUtil.yesterday();
+        System.out.println(today);
+        String replace = today.replace("-", "");
+        System.out.println(replace);
+    }
+
+    @Test
+    public void testRedis() {
+        String redisHost = "192.168.42.1";
+        String redisPort = "6357";
+        StringBuilder sb = new StringBuilder("redis://");
+        sb.append(redisHost).append(":").append(redisPort);
+        System.out.println(sb.toString());
+    }
+
+    @Test
+    public void testGetNumberByStr() {
+        String strInfo = "张某某(00697973)";
+        String numberByStr = getNumberByStr(strInfo);
+        System.out.println(numberByStr);
+    }
+
+    public String getNumberByStr(String str) {
+        String idInfo = str.substring(str.indexOf("(")+1,str.indexOf(")"));
+        if(StringUtils.isEmpty(idInfo)){
+            return "";
+        }
+        return idInfo;
+    }
+
 
 
 }
