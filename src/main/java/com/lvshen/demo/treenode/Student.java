@@ -1,6 +1,7 @@
 package com.lvshen.demo.treenode;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import java.util.Date;
  * @date: 2019/5/9 8:47
  * @since JDK 1.8
  */
+@AllArgsConstructor
 public class Student {
     private Integer score;
     private String name;

@@ -78,7 +78,7 @@ public class CollectJoinTest {
 
     @Test
     public void test5() {
-        String str = names[0] +","+ names[1] +","+ names[2] +","+ names[3] +","+ names[4];
+        String str = names[0] + "," + names[1] + "," + names[2] + "," + names[3] + "," + names[4];
         System.out.println(str);
     }
 
@@ -98,7 +98,8 @@ public class CollectJoinTest {
 
     @Test
     public void test7() {
-       String str = "";
-       //str.concat()
+        String str = "Lvshen";
+        String concat = str.concat(",").concat("Hello");
+        System.out.println(concat);
     }
 }
