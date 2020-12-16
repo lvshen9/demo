@@ -87,6 +87,11 @@
             <version>18.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
         <!--POI导出excel-->
         <dependency>
             <groupId>org.apache.poi</groupId>
