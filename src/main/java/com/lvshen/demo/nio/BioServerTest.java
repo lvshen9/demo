@@ -1,10 +1,16 @@
 package com.lvshen.demo.nio;
 
+import cn.hutool.core.lang.Console;
+import cn.hutool.core.lang.UUID;
+import com.google.common.collect.Lists;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.List;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
  * Description:
@@ -16,6 +22,7 @@ import java.util.concurrent.Executors;
  */
 public class BioServerTest {
     static ExecutorService threadPool = Executors.newCachedThreadPool();
+    List<String> lists = Lists.newCopyOnWriteArrayList();
     public static void main(String[] args) throws IOException {
         ServerSocket socket = new ServerSocket(8082);
 
@@ -27,8 +34,19 @@ public class BioServerTest {
                 accept.getInputStream().read(request);//可能出现阻塞
                 Thread.sleep(60000);
                 System.out.println(new String(request));
-                return  request.toString();
+                return request.toString();
             });
         }
     }
+
+    @Test
+    public void testAsync() {
+        for (int i = 0; i < 1000; i++) {
+            new Thread(() -> {
+                lists.add("hello");
+            }).start();
+        }
+    }
+
+
 }

@@ -1,5 +1,7 @@
 package com.lvshen.demo.cas;
 
+import org.junit.Test;
+
 import java.util.concurrent.atomic.AtomicStampedReference;
 
 /**
@@ -58,5 +60,34 @@ public class AtomicStampedTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testThread() {
+        Thread thread1 = new Thread(() -> funA(),"Thread-1");
+        Thread thread2 = new Thread(() -> funB(),"Thread-2");
+        Thread thread3 = new Thread(() -> funC(),"Thread-3");
+
+        thread1.start();
+        thread2.start();
+        thread3.start();
+    }
+
+    public void funA() {
+        System.out.println("A1");
+        System.out.println("A2");
+        System.out.println("A3");
+    }
+
+    public void funB() {
+        System.out.println("B1");
+        System.out.println("B2");
+        System.out.println("B3");
+    }
+
+    public void funC() {
+        System.out.println("C1");
+        System.out.println("C2");
+        System.out.println("C3");
     }
 }
