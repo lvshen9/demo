@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.lvshen.demo.member.entity.vo.OrderDto;
 import com.lvshen.demo.member.entity.vo.OrderVo;
 import com.lvshen.demo.treenode.Student;
@@ -19,6 +20,9 @@ import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -407,7 +411,7 @@ public class MyTest {
 
     @Test
     public void test10() {
-        String uuid = UUID.randomUUID().toString().replaceAll("-","");
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         System.out.println(uuid);
     }
 
@@ -420,7 +424,7 @@ public class MyTest {
         System.out.println("orderDto: " + orderDto);
 
         OrderVo orderVo = new OrderVo();
-        BeanUtils.copyProperties(orderDto,orderVo);
+        BeanUtils.copyProperties(orderDto, orderVo);
         System.out.println("orderVo: " + orderVo.getStatus());
 
     }
@@ -451,13 +455,82 @@ public class MyTest {
     }
 
     public String getNumberByStr(String str) {
-        String idInfo = str.substring(str.indexOf("(")+1,str.indexOf(")"));
-        if(StringUtils.isEmpty(idInfo)){
+        String idInfo = str.substring(str.indexOf("(") + 1, str.indexOf(")"));
+        if (StringUtils.isEmpty(idInfo)) {
             return "";
         }
         return idInfo;
     }
 
+    @Test
+    public void testInteger() {
+
+        HashMap<Object, Object> map = Maps.newHashMap();
+
+        Integer a1 = 120;
+        Integer a2 = 120;
+        System.out.println("a1 == a2: " + (a1 == a2));
+
+        Integer a3 = 200;
+        Integer a4 = 200;
+        System.out.println("a3 == a4: " + (a3 == a4));
+
+        System.out.println("a3.equals(a4): " + (a3.equals(a4)));
+    }
+
+    @Test
+    public void testYears() {
+        LocalDate startDate = LocalDate.of(2011, Month.JANUARY, 1);
+
+        System.out.println("开始时间  : " + startDate);
+
+        LocalDate endDate = LocalDate.now();
+
+        System.out.println("结束时间 : " + endDate);
+
+        long daysDiff = ChronoUnit.DAYS.between(startDate, endDate);
+        //long ChronoUnit.YEARS.between(startDate, endDate);
+
+        double result = daysDiff / 365;
+
+        System.out.println(result);
+    }
+
+    @Test
+    public void testCount() {
+        List<String> nameLists = Arrays.asList("Lvshen", "Lvshen", "Zhouzhou", "Huamulan", "Huamulan", "Huamulan");
+        Map<String, Integer> nameMap = Maps.newHashMap();
+
+        nameLists.forEach(name -> {
+            Integer counts = nameMap.get(name);
+            nameMap.put(name, counts == null ? 1 : ++counts);
+        });
+        System.out.println(nameMap);
+    }
+
+    @Test
+    public void testLambda() {
+        List<String> nameLists = Arrays.asList("Lvshen", "Lvshen", "Zhouzhou", "Huamulan", "Huamulan", "Huamulan");
+        Map<String, Long> nameMap = nameLists.stream().collect(Collectors.groupingBy(p -> p, Collectors.counting()));
+        System.out.println(nameMap);
+    }
+
+    @Test
+    public void testCountNew() {
+        List<String> nameLists = Arrays.asList("Lvshen", "Lvshen", "Zhouzhou", "Huamulan", "Huamulan", "Huamulan");
+        Map<String, Integer> nameMap = Maps.newHashMap();
+
+        nameLists.forEach(name -> nameMap.compute(name, (k, v) -> v == null ? 1 : ++v));
+        System.out.println(nameMap);
+    }
+
+    @Test
+    public void testCollectors() {
+        List<String> nameLists = Arrays.asList("Lvshen", "Lvshen", "Zhouzhou", "Huamulan", "Huamulan", "Huamulan");
+        Map<String, Integer> nameMap = Maps.newHashMap();
+        nameLists.forEach(name -> nameMap.put(name, Collections.frequency(nameLists, name)));
+        System.out.println(nameMap);
+    }
 
 
 }
