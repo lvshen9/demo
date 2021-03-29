@@ -5,10 +5,7 @@ import com.lvshen.demo.annotation.log.OperationType;
 import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -56,7 +53,7 @@ public class MemberController {
     @RequestMapping("/getById")
     @ResponseBody
     @OperationLog(opType = OperationType.QUERY,opBusinessName = "会员服务",opBusinessId = "#id")
-    public Member getById(String id) {
+    public Member getById(@RequestParam String id) {
         return memberService.getById(id);
     }
 

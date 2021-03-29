@@ -44,7 +44,6 @@ public class OperationLogAspect {
     HttpServletRequest request;
 
     @Around("@annotation(com.lvshen.demo.annotation.log.OperationLog)")
-
     public Object log(ProceedingJoinPoint pjp) throws Exception {
 
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
@@ -90,11 +89,11 @@ public class OperationLogAspect {
             String itemId = String.valueOf(expression.getValue(context));
             // 执行日志记录
             Operation operation = Operation.builder()
-                    .id(generatorId())
-                    .opType(opLog.opType())
+                    //.id(snowflake.nextId())
+                    .opType(opLog.opType().name())
                     .opBusinessName(opLog.opBusinessName())
                     .opBusinessId(itemId)
-                    .opTime(executeTime)
+                    .opTime(String.valueOf(executeTime))
                     //这里可以添加操作人
                     .build();
             handle(operation);
@@ -105,7 +104,7 @@ public class OperationLogAspect {
 
     private void handle(Operation operation) {
         // 通过日志打印输出,如果有需求可以创建一个operation_log表存入数据库
-        log.info("opType = " + operation.getOpType().name() + ",opItem = " + operation.getOpBusinessName() + ",opItemId = " + operation.getOpBusinessId() + ",opTime = " + operation.getOpTime());
+        log.info("opType = " + operation.getOpType() + ",opItem = " + operation.getOpBusinessName() + ",opItemId = " + operation.getOpBusinessId() + ",opTime = " + operation.getOpTime());
         // 持久化入库
         operationService.save(operation);
     }

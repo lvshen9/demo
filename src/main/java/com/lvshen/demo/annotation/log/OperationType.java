@@ -13,5 +13,4 @@ public enum OperationType {
     INSERT,
     UPDATE,
     DELETE;
-
 }

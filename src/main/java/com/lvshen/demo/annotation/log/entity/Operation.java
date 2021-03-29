@@ -1,12 +1,9 @@
 package com.lvshen.demo.annotation.log.entity;
 
-import com.lvshen.demo.annotation.log.OperationType;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Description:
@@ -23,13 +20,14 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Operation {
+public class Operation implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue
-    private String id;
-    private OperationType opType;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String opType;
     private String opBusinessName;
     private String opBusinessId;
-    private long opTime;
+    private String opTime;
     private String opUser;
 }
