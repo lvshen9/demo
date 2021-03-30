@@ -141,21 +141,20 @@ public class SensitiveWordFilter {
 
     public static void main(String[] args) {
         SensitiveWordFilter filter = new SensitiveWordFilter();
-        System.out.println("敏感词的数量：" + filter.sensitiveWordMap.size());
+        System.out.println("敏感词库构造成map后的数量：" + filter.sensitiveWordMap.size());
         String str = "韩立被村里人叫作“二愣子”，可人并不是真愣真傻，反而是村中首屈一指的聪明孩子，但" +
                 "就像其他村中的孩子一样，除了家里人外，他就很少听到有人正式叫他名字“韩立”，倒是“二愣子”“二愣子”的称呼一直伴随" +
                 "至今。而之所以被人起了个“二愣子”的绰号，也只不过是因为村里已有一个叫“愣子”的孩子了。这也没啥，村里" +
                 "·的其他孩子也是“狗娃”“二蛋”之类的被人一直称呼着，这些名字也不见得比“二愣子”好听了哪里去。";
         System.out.println("待检测语句字数：" + str.length());
-        long beginTime = System.currentTimeMillis();
         Set<String> set = filter.getSensitiveWord(str, 1);
         System.out.println("语句中包含敏感词的个数为：" + set.size() + "。包含：" + set);
-
+        long beginTime = System.currentTimeMillis();
         String replaceSensitiveWord = filter.replaceSensitiveWord(str, 1, "*");
+        long endTime = System.currentTimeMillis();
         System.out.println();
         System.out.println("替换后的句子：" + replaceSensitiveWord);
 
-        long endTime = System.currentTimeMillis();
         System.out.println("总共消耗时间为：" + (endTime - beginTime));
     }
 }

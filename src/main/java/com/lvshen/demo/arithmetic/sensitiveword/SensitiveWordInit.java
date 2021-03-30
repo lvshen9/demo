@@ -1,6 +1,7 @@
 package com.lvshen.demo.arithmetic.sensitiveword;
 
 import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.Set;
 /**
  * 初始化敏感词库，将敏感词加入到HashMap中，构建DFA算法模型
  */
+@Slf4j
 public class SensitiveWordInit {
 	private String ENCODING = "GBK";    //字符编码
 	@SuppressWarnings("rawtypes")
@@ -36,7 +38,6 @@ public class SensitiveWordInit {
 			Set<String> keyWordSet = readSensitiveWordFile();
 			//将敏感词库加入到HashMap中
 			addSensitiveWordToHashMap(keyWordSet);
-			//spring获取application，然后application.setAttribute("sensitiveWordMap",sensitiveWordMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,6 +91,9 @@ public class SensitiveWordInit {
 				}
 			}
 		}
+
+		log.info("nowMap: " + sensitiveWordMap);
+
 	}
 
 	/**
