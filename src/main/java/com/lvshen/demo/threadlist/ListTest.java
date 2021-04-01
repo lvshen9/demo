@@ -1,11 +1,15 @@
 package com.lvshen.demo.threadlist;
 
 import com.google.common.collect.Lists;
+import org.junit.Test;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 /**
  * Description:
@@ -45,5 +49,56 @@ public class ListTest {
         }
         System.out.println("All task finished!");
         System.out.println("list size is :" + list.size());
+    }
+
+    @Test
+    public void testList() {
+        int[] array = {1, 2, 3};
+        List list = Arrays.asList(array);
+
+        System.out.println(list);
+        //list.add(4);
+
+        array[2] = 10;
+        Object o = list.get(0);
+        System.out.println(o);
+
+        Integer[] arrayInteger = {1, 2, 3};
+        List listInteger = Arrays.asList(arrayInteger);
+        System.out.println(listInteger);
+
+    }
+
+    @Test
+    public void testList2() {
+        String[] arrayStr = {"1", "2", "3"};
+        List<String> list = Arrays.asList(arrayStr);
+        System.out.println(list);
+
+        arrayStr[2] = "10";
+
+        System.out.println(list);
+    }
+
+    @Test
+    public void testList3() {
+        String[] arrayStr = {"1", "2", "3"};
+        List<String> list = new ArrayList<>();
+
+        list.add("4");
+        System.out.println(list);
+
+    }
+
+    @Test
+    public void testList4() {
+        int[]  a = {1,2,3};
+        List list = CollectionUtils.arrayToList(a);
+        System.out.println(list);
+
+        List<Integer> iList = Arrays.stream(a)
+                .boxed()
+                .collect(Collectors.toList());
+        System.out.println(iList);
     }
 }
