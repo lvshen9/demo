@@ -52,6 +52,18 @@ public class ListTest {
     }
 
     @Test
+    public void test1() {
+        List<String> players = new ArrayList<>(3);
+        players.add("1");
+        players.add("2");
+        players.add("3");
+        players.add("4");
+        players.add("5");
+
+        System.out.println(players);
+    }
+
+    @Test
     public void testList() {
         int[] array = {1, 2, 3};
         List list = Arrays.asList(array);

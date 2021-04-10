@@ -2,6 +2,8 @@ package com.lvshen.demo.member.controller;
 
 import com.lvshen.demo.annotation.log.OperationLog;
 import com.lvshen.demo.annotation.log.OperationType;
+import com.lvshen.demo.annotation.sensitive.SensitiveService;
+import com.lvshen.demo.annotation.sensitive.UserInfo;
 import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,14 @@ import java.util.List;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private SensitiveService sensitiveService;
+
+    @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
+    public UserInfo getUserInfo() {
+        return sensitiveService.getUserInfo();
+    }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public int deleteById(String id) {
