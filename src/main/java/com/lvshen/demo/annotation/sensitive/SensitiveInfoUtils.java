@@ -39,7 +39,6 @@ public class SensitiveInfoUtils {
         if (StringUtils.isBlank(id)) {
             return "";
         }
-
         return StringUtils.left(id, 3).concat(StringUtils
                 .removeStart(StringUtils.leftPad(StringUtils.right(id, 3), StringUtils.length(id), "*"),
                         "***"));

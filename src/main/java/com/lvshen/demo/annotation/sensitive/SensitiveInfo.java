@@ -16,7 +16,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @JacksonAnnotationsInside
-@JsonSerialize(using = SensitiveInfoSerialize.class)
+@JsonSerialize(using = SensitiveDataSerialize.class)
 public @interface SensitiveInfo {
     SensitiveType value();
 }
