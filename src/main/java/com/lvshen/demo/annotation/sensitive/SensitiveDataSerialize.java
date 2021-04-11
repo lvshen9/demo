@@ -23,9 +23,6 @@ public class SensitiveDataSerialize extends JsonSerializer<String> implements
         ContextualSerializer {
     private SensitiveType type;
 
-    /*@Autowired
-    private SensitiveStrategyService sensitiveStrategyService;*/
-
     public SensitiveDataSerialize() {
     }
 

@@ -25,4 +25,17 @@ public class SensitiveService {
         userInfo.setUseNo("11");
         return userInfo;
     }
+
+    public UserInfo handleData() {
+        UserInfo userInfo = getUserInfo();
+        String mobile = userInfo.getMobile();
+        String idCard = userInfo.getIdCard();
+
+        //将手机和身份证号处理
+        //String afterMobile = ....
+        //String afterIdCard = ....
+        //userInfo.setMobile(afterMobile)
+        //userInfo.setIdCard(afterIdCard)
+        return userInfo;
+    }
 }
