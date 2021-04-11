@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
+import com.lvshen.demo.annotation.sensitive.strategy.SensitiveStrategyService;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -22,6 +23,9 @@ public class SensitiveDataSerialize extends JsonSerializer<String> implements
         ContextualSerializer {
     private SensitiveType type;
 
+    /*@Autowired
+    private SensitiveStrategyService sensitiveStrategyService;*/
+
     public SensitiveDataSerialize() {
     }
 
@@ -32,6 +36,14 @@ public class SensitiveDataSerialize extends JsonSerializer<String> implements
     @Override
     public void serialize(final String s, final JsonGenerator jsonGenerator,
                           final SerializerProvider serializerProvider) throws IOException {
+        //jsonHandler(s, jsonGenerator);
+
+        SensitiveStrategyService sensitiveStrategyService = SpringContextHolder.getBean(SensitiveStrategyService.class);
+        String generatorSensitive = sensitiveStrategyService.generatorSensitive(this.type, s);
+        jsonGenerator.writeString(generatorSensitive);
+    }
+
+    private void jsonHandler(String s, JsonGenerator jsonGenerator) throws IOException {
         switch (this.type) {
             case CHINESE_NAME: {
                 jsonGenerator.writeString(SensitiveInfoUtils.chineseName(s));
@@ -62,7 +74,6 @@ public class SensitiveDataSerialize extends JsonSerializer<String> implements
                 break;
             }
         }
-
     }
 
     @Override
