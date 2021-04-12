@@ -1,6 +1,7 @@
 package com.lvshen.demo.threadlist;
 
 import com.google.common.collect.Lists;
+import net.sf.json.JSONArray;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
@@ -112,5 +113,11 @@ public class ListTest {
                 .boxed()
                 .collect(Collectors.toList());
         System.out.println(iList);
+    }
+
+    @Test
+    public void testList5() {
+        JSONArray imgUrlArray = JSONArray.fromObject("[1,2,3]");
+        System.out.println(imgUrlArray);
     }
 }
