@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.lvshen.demo.catchexception.BusinessException;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -37,14 +38,20 @@ public class ExcelService {
         dto2.setName("Lvshen");
         dto2.setAddress("中国 鄱阳湖");
         dto2.setEnrolDate("2021-04-18");
-        dto2.setDes("I can flt");
+        dto2.setDes("I can fly");
         list.add(dto2);
 
         return list;
     }
 
+    public void exportExcelWeb(HttpServletResponse response, List<TeacherInfoDto> teacherInfoDtoList) {
+        String fileName = "Web导出测试";
+        String sheetName = "sheet";
+        EasyExcelUtils.exportExcelWeb(response, teacherInfoDtoList, TeacherInfoDto.class, fileName, sheetName);
+    }
 
-    public boolean exportInfo(String fileName, String sheetName,List<? extends BaseRowModel> data) {
+
+    public boolean exportInfo(String fileName, String sheetName, List<? extends BaseRowModel> data) {
         FileOutputStream fileOutputStream = null;
         try {
             //获取文件输出流
