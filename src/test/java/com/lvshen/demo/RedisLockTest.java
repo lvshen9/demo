@@ -41,12 +41,6 @@ public class RedisLockTest {
         } else {
             log.info("获得锁");
         }
-       /* Assert.assertNotNull(redisLock1);
-        try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
         // 因为非重入锁，所以此时再获取锁失败
         RedisLock redisLock2 = redisTemplateLockUtils.getLock("redisLock", 10000L, 5000L);
         //Assert.assertNull(redisLock2);
