@@ -11,6 +11,8 @@ import com.lvshen.demo.annotation.sensitive.strategy.SensitiveStrategyService;
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.lvshen.demo.annotation.sensitive.SensitiveType.*;
+
 /**
  * Description:
  *
@@ -40,6 +42,12 @@ public class SensitiveDataSerialize extends JsonSerializer<String> implements
         jsonGenerator.writeString(generatorSensitive);
     }
 
+    /**
+     * 使用switch
+     * @param s
+     * @param jsonGenerator
+     * @throws IOException
+     */
     private void jsonHandler(String s, JsonGenerator jsonGenerator) throws IOException {
         switch (this.type) {
             case CHINESE_NAME: {
@@ -71,6 +79,37 @@ public class SensitiveDataSerialize extends JsonSerializer<String> implements
                 break;
             }
         }
+    }
+
+    /**
+     * 使用if
+     * @param s
+     * @param jsonGenerator
+     * @throws IOException
+     */
+    private void jsonHandlerWithIf(String s, JsonGenerator jsonGenerator) throws IOException {
+        if (CHINESE_NAME == this.type) {
+            jsonGenerator.writeString(SensitiveInfoUtils.chineseName(s));
+        }
+        if (ID_CARD == this.type) {
+            jsonGenerator.writeString(SensitiveInfoUtils.idCardNum(s));
+        }
+        if (FIXED_PHONE == this.type) {
+            jsonGenerator.writeString(SensitiveInfoUtils.fixedPhone(s));
+        }
+        if (MOBILE_PHONE == this.type) {
+            jsonGenerator.writeString(SensitiveInfoUtils.mobilePhone(s));
+        }
+        if (ADDRESS == this.type) {
+            jsonGenerator.writeString(SensitiveInfoUtils.address(s, 4));
+        }
+        if (EMAIL == this.type) {
+            jsonGenerator.writeString(SensitiveInfoUtils.email(s));
+        }
+        if (BANK_CARD == this.type) {
+            jsonGenerator.writeString(SensitiveInfoUtils.bankCard(s));
+        }
+
     }
 
     @Override

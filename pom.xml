@@ -390,6 +390,13 @@
             <classifier>jdk15</classifier>
         </dependency>
 
+        <!--规则引擎-->
+        <dependency>
+            <groupId>org.jeasy</groupId>
+            <artifactId>easy-rules-core</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <!-- dependency management -->
