@@ -32,7 +32,6 @@ public class BankCardRule implements SensitiveRule {
     public String maskingData(Facts facts) {
         RuleEntity ruleInfo = facts.get("ruleInfo");
         String infoStr = ruleInfo.getInfoStr();
-        SensitiveInfoUtils.bankCard(infoStr);
-        return ruleInfo.toString();
+        return SensitiveInfoUtils.bankCard(infoStr);
     }
 }

@@ -32,7 +32,6 @@ public class EmailRule implements SensitiveRule {
     public String maskingData(Facts facts) {
         RuleEntity ruleInfo = facts.get("ruleInfo");
         String infoStr = ruleInfo.getInfoStr();
-        SensitiveInfoUtils.email(infoStr);
-        return ruleInfo.toString();
+        return SensitiveInfoUtils.email(infoStr);
     }
 }

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RuleService {
 
-    public void execute(String str, SensitiveType type) {
+    public void execute(SensitiveType type, String str) {
         // 封装Facts
         Facts facts = new Facts();
         facts.put("ruleInfo", new RuleEntity(type, str));

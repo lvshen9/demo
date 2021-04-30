@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
+import com.lvshen.demo.annotation.sensitive.ruleenginee.RuleService;
 import com.lvshen.demo.annotation.sensitive.strategy.SensitiveStrategyService;
 
 import java.io.IOException;
@@ -39,6 +40,10 @@ public class SensitiveDataSerialize extends JsonSerializer<String> implements
 
         SensitiveStrategyService sensitiveStrategyService = SpringContextHolder.getBean(SensitiveStrategyService.class);
         String generatorSensitive = sensitiveStrategyService.generatorSensitive(this.type, s);
+
+        RuleService ruleService = SpringContextHolder.getBean(RuleService.class);
+        //String generatorSensitive = ruleService.execute(this.type, s);
+
         jsonGenerator.writeString(generatorSensitive);
     }
 

@@ -32,7 +32,6 @@ public class AddressRule implements SensitiveRule {
     public String maskingData(Facts facts) {
         RuleEntity ruleInfo = facts.get("ruleInfo");
         String infoStr = ruleInfo.getInfoStr();
-        SensitiveInfoUtils.address(infoStr, 4);
-        return ruleInfo.toString();
+        return SensitiveInfoUtils.address(infoStr, 4);
     }
 }

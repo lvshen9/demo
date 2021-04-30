@@ -32,7 +32,6 @@ public class IdCardRule implements SensitiveRule {
     public String maskingData(Facts facts) {
         RuleEntity ruleInfo = facts.get("ruleInfo");
         String infoStr = ruleInfo.getInfoStr();
-        SensitiveInfoUtils.idCardNum(infoStr);
-        return ruleInfo.toString();
+        return SensitiveInfoUtils.idCardNum(infoStr);
     }
 }

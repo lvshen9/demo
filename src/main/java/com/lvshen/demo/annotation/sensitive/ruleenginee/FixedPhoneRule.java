@@ -32,7 +32,6 @@ public class FixedPhoneRule implements SensitiveRule {
     public String maskingData(Facts facts) {
         RuleEntity ruleInfo = facts.get("ruleInfo");
         String infoStr = ruleInfo.getInfoStr();
-        SensitiveInfoUtils.fixedPhone(infoStr);
-        return ruleInfo.toString();
+        return SensitiveInfoUtils.fixedPhone(infoStr);
     }
 }
