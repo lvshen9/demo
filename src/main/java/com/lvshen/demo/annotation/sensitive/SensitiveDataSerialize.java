@@ -39,10 +39,10 @@ public class SensitiveDataSerialize extends JsonSerializer<String> implements
         //jsonHandler(s, jsonGenerator);
 
         SensitiveStrategyService sensitiveStrategyService = SpringContextHolder.getBean(SensitiveStrategyService.class);
-        String generatorSensitive = sensitiveStrategyService.generatorSensitive(this.type, s);
+        //String generatorSensitive = sensitiveStrategyService.generatorSensitive(this.type, s);
 
         RuleService ruleService = SpringContextHolder.getBean(RuleService.class);
-        //String generatorSensitive = ruleService.execute(this.type, s);
+        String generatorSensitive = ruleService.execute(this.type, s);
 
         jsonGenerator.writeString(generatorSensitive);
     }
@@ -114,7 +114,6 @@ public class SensitiveDataSerialize extends JsonSerializer<String> implements
         if (BANK_CARD == this.type) {
             jsonGenerator.writeString(SensitiveInfoUtils.bankCard(s));
         }
-
     }
 
     @Override

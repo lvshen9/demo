@@ -1,7 +1,9 @@
 package com.lvshen.demo.annotation.sensitive.ruleenginee;
 
+import com.lvshen.demo.annotation.sensitive.SensitiveType;
 import org.jeasy.rules.annotation.Fact;
 import org.jeasy.rules.api.Facts;
+import org.springframework.stereotype.Component;
 
 /**
  * Description:
@@ -11,7 +13,10 @@ import org.jeasy.rules.api.Facts;
  * @date: 2021-4-30 15:34
  * @since JDK 1.8
  */
+@Component
 public interface SensitiveRule {
+
+    SensitiveType getCurrentSensitiveType();
     boolean isCurrentType(@Fact("ruleInfo") RuleEntity ruleInfo);
-    String maskingData(Facts facts);
+    void maskingData(Facts facts);
 }

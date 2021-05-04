@@ -9,6 +9,8 @@ import org.jeasy.rules.annotation.Rule;
 import org.jeasy.rules.api.Facts;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /**
  * Description:
  *
@@ -22,16 +24,23 @@ import org.springframework.stereotype.Component;
 public class AddressRule implements SensitiveRule {
 
     @Override
+    public SensitiveType getCurrentSensitiveType() {
+        return SensitiveType.ADDRESS;
+    }
+
+    @Override
     @Condition
     public boolean isCurrentType(@Fact("ruleInfo") RuleEntity ruleInfo) {
-        return SensitiveType.ADDRESS == ruleInfo.getType();
+        return getCurrentSensitiveType() == ruleInfo.getType();
     }
 
     @Override
     @Action
-    public String maskingData(Facts facts) {
+    public void maskingData(Facts facts) {
         RuleEntity ruleInfo = facts.get("ruleInfo");
         String infoStr = ruleInfo.getInfoStr();
-        return SensitiveInfoUtils.address(infoStr, 4);
+        String address = SensitiveInfoUtils.address(infoStr, 4);
+        Map<String, String> map = RuleMapService.getMap();
+        map.put("maskingData", address);
     }
 }

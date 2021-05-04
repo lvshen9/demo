@@ -1,12 +1,15 @@
 package com.lvshen.demo.annotation.sensitive.ruleenginee;
 
+import com.google.common.collect.Maps;
 import com.lvshen.demo.annotation.sensitive.SensitiveType;
-import com.lvshen.demo.ruleenginee.WeatherRule;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.api.RulesEngine;
 import org.jeasy.rules.core.DefaultRulesEngine;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Description:
@@ -19,19 +22,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class RuleService {
 
-    public void execute(SensitiveType type, String str) {
+    Map<SensitiveType, SensitiveRule> map = Maps.newHashMap();
+
+    public RuleService(List<SensitiveRule> sensitiveStrategyList) {
+        sensitiveStrategyList.forEach(sensitiveRule -> map.put(sensitiveRule.getCurrentSensitiveType(), sensitiveRule));
+    }
+
+    public String execute(SensitiveType type, String str) {
         // 封装Facts
         Facts facts = new Facts();
         facts.put("ruleInfo", new RuleEntity(type, str));
 
         // 注册Rule
-        AddressRule addressRule = new AddressRule();
         Rules rules = new Rules();
-        rules.register(addressRule);
+        map.forEach((k, v) -> rules.register(v));
 
         // 执行Rule
         RulesEngine rulesEngine = new DefaultRulesEngine();
         rulesEngine.fire(rules, facts);
+        Map<String, String> map = RuleMapService.getMap();
+        return map.get("maskingData");
     }
-
 }
