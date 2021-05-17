@@ -532,5 +532,11 @@ public class MyTest {
         System.out.println(nameMap);
     }
 
+    @Test
+    public void testCondition() {
+        List<String> condition = Arrays.asList("lvshen","mulan","zhouzhou","fly");
+
+    }
+
 
 }

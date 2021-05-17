@@ -6,6 +6,7 @@ import com.lvshen.demo.annotation.sensitive.SensitiveService;
 import com.lvshen.demo.annotation.sensitive.UserInfo;
 import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.member.service.MemberService;
+import com.lvshen.demo.threadpool.springexecutor.ThreadPoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,17 @@ public class MemberController {
 
     @Autowired
     private SensitiveService sensitiveService;
+
+    @Autowired
+    private ThreadPoolService threadPoolService;
+
+    /**
+     * SpringBoot异步执行示例
+     */
+    @RequestMapping(value = "/executeAsync", method = RequestMethod.POST)
+    public void executeAsync() {
+        threadPoolService.executeAsync();
+    }
 
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
     public UserInfo getUserInfo() {
