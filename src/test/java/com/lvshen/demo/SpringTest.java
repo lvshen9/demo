@@ -2,8 +2,12 @@ package com.lvshen.demo;
 
 import com.alibaba.fastjson.JSON;
 import com.lvshen.demo.annotation.sensitive.UserInfo;
+import com.lvshen.demo.annotation.validator.GeneratorStudentService;
+import com.lvshen.demo.treenode.Student;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -20,6 +24,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 public class SpringTest {
 
+    @Autowired
+    private GeneratorStudentService generatorStudentService;
+
     @org.junit.Test
     public void test() {
         UserInfo userInfo = new UserInfo();
@@ -35,5 +42,12 @@ public class SpringTest {
         String json= JSON.toJSONString(userInfo);
         System.out.println(json);
 
+    }
+
+    @Test
+    public void testCreateStudent() {
+        Student student = generatorStudentService.initData();
+        generatorStudentService.creatStudent(student);
+        System.out.println("测试结束...");
     }
 }

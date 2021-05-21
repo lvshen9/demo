@@ -534,8 +534,22 @@ public class MyTest {
 
     @Test
     public void testCondition() {
-        List<String> condition = Arrays.asList("lvshen","mulan","zhouzhou","fly");
+        List<String> condition = Arrays.asList("lvshen", "mulan", "zhouzhou", "fly");
 
+    }
+
+    @Test
+    public void testMonth() {
+        LocalDate now = LocalDate.now();
+        Month month = now.getMonth();
+        System.out.println(month.getValue());
+
+        Date date = DateUtil.date();
+        //获得年的部分
+        DateUtil.year(date);
+        //获得月份，从0开始计数
+        int month1 = DateUtil.month(date);
+        System.out.println(month1 + 1);
     }
 
 

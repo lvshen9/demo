@@ -7,6 +7,7 @@ import com.lvshen.demo.annotation.sensitive.UserInfo;
 import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.member.service.MemberService;
 import com.lvshen.demo.threadpool.springexecutor.ThreadPoolService;
+import com.lvshen.demo.treenode.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
