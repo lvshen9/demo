@@ -2,6 +2,7 @@ package com.lvshen.demo;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -550,6 +551,24 @@ public class MyTest {
         //获得月份，从0开始计数
         int month1 = DateUtil.month(date);
         System.out.println(month1 + 1);
+    }
+
+    @Test
+    public void testRandom() {
+        int i = RandomUtil.randomInt(1992, 2020);
+        System.out.println(String.valueOf(i));
+    }
+
+    @Test
+    public void testMapKey2List() {
+        Map<String,String> maps = Maps.newHashMap();
+        maps.put("1","Lvshen");
+        maps.put("2","Keety");
+        maps.put("3","Ken");
+
+        Set<String> strings = maps.keySet();
+        List<String> collect = strings.stream().collect(Collectors.toList());
+        System.out.println(collect);
     }
 
 
