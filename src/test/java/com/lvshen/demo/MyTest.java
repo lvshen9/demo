@@ -22,6 +22,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -569,6 +570,16 @@ public class MyTest {
         Set<String> strings = maps.keySet();
         List<String> collect = strings.stream().collect(Collectors.toList());
         System.out.println(collect);
+    }
+
+    @Test
+    public void testLocalDateTime() {
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime addNow = now.plusMinutes(2);
+        long needAddMs = ChronoUnit.MILLIS.between(now, addNow);
+
+        System.out.println(needAddMs);
     }
 
 
