@@ -58,28 +58,28 @@ public class LocalDateTest {
     @Test
     public void compareDate() {
         LocalDate today = LocalDate.now();
-        LocalDate date1 = LocalDate.of(2021, 10, 29);
+        LocalDate date1 = LocalDate.of(2021, 11, 3);
 
         if (date1.equals(today)) {
-            System.out.printf("TODAY %s and DATE1 %s are same date %n", today, date1);
+            Console.log("today [{}] 和 date1 [{}] 是同一天", today, date1);
         }
     }
 
     //处理周期性的日期
     @Test
-    public void cycleDate() {
+    public void  calculateDate() {
 
         //计算生日
         LocalDate today = LocalDate.now();
-        LocalDate dateOfBirth = LocalDate.of(1995, 11, 02);
+        LocalDate dateOfBirth = LocalDate.of(1995, 11, 3);
 
         MonthDay birthday = MonthDay.of(dateOfBirth.getMonth(), dateOfBirth.getDayOfMonth());
         MonthDay currentMonthDay = MonthDay.from(today);
 
         if (currentMonthDay.equals(birthday)) {
-            System.out.println("Many Many happy returns of the day !!");
+            System.out.println("生日快乐 !!");
         } else {
-            System.out.println("Sorry, today is not your birthday");
+            System.out.println("您的生日还没到哦");
         }
     }
 
@@ -99,7 +99,12 @@ public class LocalDateTest {
     public void plusHours() {
         LocalTime time = LocalTime.now();
         LocalTime newTime = time.plusHours(2); // 增加两小时
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime newLocalDateTime = now.plusHours(2);
+
         System.out.println("Time after 2 hours : " + newTime);
+        System.out.println("newLocalDateTime after 2 hours : " + newLocalDateTime);
     }
 
     //如何计算一周后的日期
@@ -138,9 +143,9 @@ public class LocalDateTest {
     public void isBeforeOrIsAfter() {
         LocalDate today = LocalDate.now();
 
-        LocalDate tomorrow = LocalDate.of(2020, 1, 29);
-        if (tomorrow.isAfter(today)) {
-            System.out.println("Tomorrow comes after today");
+        LocalDate destLocalDate = LocalDate.of(2020, 1, 29);
+        if (destLocalDate.isAfter(today)) {
+            System.out.println("destLocalDate comes after today");
         }
 
         LocalDate yesterday = today.minus(1, ChronoUnit.DAYS);
@@ -177,9 +182,9 @@ public class LocalDateTest {
     public void isLeapYear() {
         LocalDate today = LocalDate.now();
         if (today.isLeapYear()) {
-            System.out.println("This year is Leap year");
+            System.out.println("今年是闰年");
         } else {
-            System.out.println("2018 is not a Leap year");
+            System.out.println("今年不是闰年");
         }
     }
 
@@ -187,15 +192,9 @@ public class LocalDateTest {
     @Test
     public void calcDateDays() {
         LocalDate today = LocalDate.now();
-
-
         LocalDate destLocalDate = LocalDate.of(2018, Month.MAY, 14);
-
         Period period = Period.between(destLocalDate, today);
-
-
         Console.log("destLocalDate【{}】到today【{}】相差了【{}】年【{}】月【{}】天", destLocalDate, today, period.getYears(), period.getMonths(), period.getDays());
-
     }
 
     //两个日期之间的时间差
@@ -210,6 +209,7 @@ public class LocalDateTest {
         LocalDateTime datetime = LocalDateTime.of(2018, Month.MAY, 14, 00, 00);
 
         long needAddMs2 = ChronoUnit.MILLIS.between(datetime, now);
+
         System.out.println(needAddMs2);
     }
 
@@ -230,6 +230,7 @@ public class LocalDateTest {
     }
 
     // 使用预定义的格式化工具去解析或格式化日期
+    @Test
     public void formateDate() {
         String dayAfterTommorrow = "20180210";
         LocalDate formatted = LocalDate.parse(dayAfterTommorrow, DateTimeFormatter.BASIC_ISO_DATE);
