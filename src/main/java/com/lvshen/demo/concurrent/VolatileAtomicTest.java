@@ -3,6 +3,7 @@ package com.lvshen.demo.concurrent;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -21,7 +22,9 @@ public class VolatileAtomicTest {
 
     AtomicInteger atomicInteger = new AtomicInteger();
 
-    public static void increase() {
+    private static volatile LongAdder longAdder = new LongAdder();
+
+    public static void increaseWithLock() {
         try {
             lock.lock();
             num++;
@@ -30,13 +33,21 @@ public class VolatileAtomicTest {
         }
     }  //这里加了锁 上面的num可以不用加volatile,寄存器获取数据直接从主内存中获取。
 
+    public static void increase() {
+        num++;
+    }
+    public static synchronized void increaseWithSync() {
+        num++;
+    }
+
     @Test
     public void test() throws InterruptedException {
         Thread[] threads = new Thread[10];
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new Thread(() -> {
                 for (int j = 0; j < 1000; j++) {
-                    num = atomicInteger.incrementAndGet();
+                    //num = atomicInteger.incrementAndGet();
+                    longAdder.increment();
                 }
             });
 
@@ -47,7 +58,7 @@ public class VolatileAtomicTest {
             thread.join();
         }
 
-        System.out.println(num);
+        System.out.println(longAdder);
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -55,7 +66,9 @@ public class VolatileAtomicTest {
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new Thread(() -> {
                 for (int j = 0; j < 1000; j++) {
-                    increase();
+                    //increaseWithLock();
+                    //increase();
+                    increaseWithSync();
                 }
             });
 
