@@ -3,6 +3,7 @@ package com.lvshen.demo.yjh.java8.stream;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.lvshen.demo.common.MyStringUtils;
 import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.member.service.MemberService;
 import com.lvshen.demo.treenode.Student;
@@ -213,22 +214,22 @@ public class OptionalTest {
         //原始操作
         Set<Map.Entry<String, Member>> entries = memberMap.entrySet();
         for (Map.Entry<String, Member> entry : entries) {
-            System.out.println(entry.getKey()+":"+entry.getValue());
+            System.out.println(entry.getKey() + ":" + entry.getValue());
         }
 
         System.out.println();
 
         //Java8
-        memberMap.forEach((key,value) -> System.out.println(key+":"+value));
+        memberMap.forEach((key, value) -> System.out.println(key + ":" + value));
 
     }
 
     @Test
     public void testOperatorMap2() {
-        Map<String,String> map = Maps.newHashMap();
-        map.put("key","微信搜：Lvshen_9");
+        Map<String, String> map = Maps.newHashMap();
+        map.put("key", "微信搜：Lvshen_9");
         if (map.get("key") == null) {
-            map.put("key","Lvshen的技术小屋");
+            map.put("key", "Lvshen的技术小屋");
         }
 
         map.putIfAbsent("key", "Lvshen的技术小屋");
@@ -236,5 +237,17 @@ public class OptionalTest {
         System.out.println(map);
     }
 
+    @Test
+    public void testMap4Java8() {
+        List<String> list = Lists.newArrayList();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+
+        list = list.stream().map(x -> "'".concat(x).concat("'")).collect(Collectors.toList());
+
+        String s = MyStringUtils.list2String(list, ",");
+        System.out.println(s);
+    }
 
 }
