@@ -24,7 +24,7 @@ public class Sportsman {
      */
     private Integer height;
 
-    public static int compareByNameThenHigt(Sportsman s1, Sportsman s2) {
+    public static int compareByNameThenHeight(Sportsman s1, Sportsman s2) {
         if (s1.name.equals(s2.name)) {
             return Integer.compare(s1.height, s2.height);
         } else {
