@@ -29,9 +29,15 @@ public class DelayTimer implements ApplicationListener <ContextRefreshedEvent> {
     
     @Value("${thread.size}")
     private int length;
+
+    @Value("${spring.redis.enable}")
+    private boolean redisEnable;
     
     @Override 
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        if (!redisEnable) {
+            return;
+        }
         ExecutorService executorService = new ThreadPoolExecutor(
                 length, 
                 length,

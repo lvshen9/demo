@@ -29,13 +29,13 @@ import java.util.Collection;
 @RunWith(SpringRunner.class)
 public class KafkaTest {
 
-	@Autowired
+	//@Autowired
 	private KafkaProducer kafkaProducer;
 
-	@Resource
+	//@Resource
 	private KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
 
-	@Resource(name = "kafkaTemplates")
+	//@Resource(name = "kafkaTemplates")
 	private KafkaTemplate kafkaTemplate;
 
 	@Test

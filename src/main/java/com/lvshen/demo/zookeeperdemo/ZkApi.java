@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 public class ZkApi {
 
-    @Autowired
+    //@Autowired
     private ZooKeeper zkClient;
 
 
@@ -142,6 +142,9 @@ public class ZkApi {
      */
     @PostConstruct
     public void init() {
+        if (zkClient == null) {
+            return;
+        }
         String path = "/test/lvshen";
         log.info("【执行初始化测试方法。。。。。。。。。。。。】");
         //createNode(path, "测试");

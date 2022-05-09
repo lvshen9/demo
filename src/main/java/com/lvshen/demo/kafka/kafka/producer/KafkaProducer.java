@@ -19,7 +19,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 @Slf4j
 public class KafkaProducer {
 
-    @Autowired
+    //@Autowired
     private KafkaTemplate kafkaTemplate;
 
     @Value("${spring.kafka.topic}")

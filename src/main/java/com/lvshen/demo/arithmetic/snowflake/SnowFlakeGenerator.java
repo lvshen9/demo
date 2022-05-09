@@ -20,7 +20,7 @@ import java.util.Date;
 
 @ConditionalOnMissingBean(IdGenerator.class)
 public class SnowFlakeGenerator implements IdGenerator {
-    public SnowFlakeGenerator() throws ParseException {
+    public SnowFlakeGenerator() {
     }
 
     @Override
@@ -31,7 +31,16 @@ public class SnowFlakeGenerator implements IdGenerator {
     private static long workId;
     // private long baseTimestamp = DateUtils.parseDate("2018-01-01 00:00:00").getTime();
 
-    private long baseTimestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-06-09 00:00:00").getTime();
+    private long baseTimestamp;
+
+    {
+        try {
+            baseTimestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-06-09 00:00:00").getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 序列号位数:7 支持每毫秒128个数字
      */

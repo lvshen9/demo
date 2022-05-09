@@ -26,8 +26,8 @@ import java.util.Map;
  * @date: 2019/12/5 9:21
  * @since JDK 1.8
  */
-@Component("kafkaConfigurations")
-@EnableKafka
+//@Component("kafkaConfigurations")
+//@EnableKafka
 public class KafkaConfiguration {
     @Autowired
     private KafkaConfigProperties kafkaConfigProperties;

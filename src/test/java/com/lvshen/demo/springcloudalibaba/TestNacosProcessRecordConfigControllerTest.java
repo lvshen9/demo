@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @SpringBootTest
 @RunWith(SpringRunner.class)
-class TestNacosConfigControllerTest {
+class TestNacosProcessRecordConfigControllerTest {
 
     @Autowired
     private TestNacosConfigController testNacosConfigController;

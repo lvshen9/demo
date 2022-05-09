@@ -19,13 +19,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 @RequestMapping("config")
-@RefreshScope
+//@RefreshScope
 public class TestNacosConfigController {
 
-    @Value("${useLocalCache:false}")
+    //@Value("${useLocalCache:false}")
     private boolean useLocalCache;
 
-    @Value("${name:zhouzhou}")
+    //@Value("${name:zhouzhou}")
     private String name;
 
     public void setUseLocalCache(boolean useLocalCache) {
