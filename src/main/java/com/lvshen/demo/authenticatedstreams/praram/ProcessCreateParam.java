@@ -13,7 +13,7 @@ import lombok.Data;
 @Data
 public class ProcessCreateParam {
     /**
-     * flow_code:审核流编号，必填
+     * code:审核流编号，必填
      */
     private String code;
 

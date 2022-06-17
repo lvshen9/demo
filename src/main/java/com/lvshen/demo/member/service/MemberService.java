@@ -1,6 +1,8 @@
 package com.lvshen.demo.member.service;
 
 import com.lvshen.demo.annotation.export.ExportExcel;
+import com.lvshen.demo.annotation.log.OperationLog;
+import com.lvshen.demo.annotation.log.OperationType;
 import com.lvshen.demo.member.entity.Member;
 import com.lvshen.demo.member.mapper.MemberMapper;
 import com.lvshen.demo.redis.cache.CustomizeCache;
@@ -34,6 +36,16 @@ public class MemberService {
 
     public Member getById(String id) {
         return memberMapper.getMemberById(id);
+    }
+
+    @OperationLog(opType = OperationType.QUERY,opBusinessName = "会员服务",opBusinessId = "#id")
+    public Member getTestById(String id) {
+        Member member = new Member();
+        member.setId(id);
+        member.setName("Lvshen");
+        member.setCode(10);
+        member.setAnnotationParam("test is end");
+        return member;
     }
 
     @CustomizeCache(value = "member", key = "#name",expireTimes = 3600)

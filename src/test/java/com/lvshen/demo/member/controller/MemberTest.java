@@ -188,4 +188,10 @@ class MemberTest {
         System.out.println(student);
     }
 
+    @Test
+    public void testOperationLog() {
+        Member testById = memberService.getTestById("10");
+        System.out.println(testById);
+    }
+
 }

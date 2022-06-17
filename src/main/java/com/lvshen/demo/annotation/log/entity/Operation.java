@@ -23,8 +23,7 @@ import java.io.Serializable;
 public class Operation implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
     private String opType;
     private String opBusinessName;
     private String opBusinessId;

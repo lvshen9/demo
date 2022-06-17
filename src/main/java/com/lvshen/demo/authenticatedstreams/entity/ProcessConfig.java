@@ -29,7 +29,7 @@ public class ProcessConfig implements Serializable {
     private String id;
 
     /**
-     * flow_code:审核流编号
+     * code:审核流编号
      */
     @TableField(value = "code")
     private String code;

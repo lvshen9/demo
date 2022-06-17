@@ -62,7 +62,7 @@ public class ProcessService {
         String currentApproveMan = getCurrentApproveMan(code, 1);
         process.setApproveMan(currentApproveMan);
         //进入审核流程之前，创建的流程单状态默认为：审核中
-        process.setStatus(Byte.valueOf("0"));
+        process.setStatus(Byte.valueOf(ApproveStatusEnum.IN.getValue()));
 
         processMapper.insert(process);
 
