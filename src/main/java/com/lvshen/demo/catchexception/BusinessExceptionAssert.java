@@ -1,6 +1,5 @@
 package com.lvshen.demo.catchexception;
 
-import com.google.common.base.Strings;
 import org.springframework.lang.Nullable;
 
 
@@ -76,6 +75,8 @@ public class BusinessExceptionAssert {
             throw new BusinessException(code, String.valueOf(errorMessage));
         }
     }
+
+    //无code
 
     public static <T> T checkNotNull(T reference, @Nullable Object errorMessage) {
         if (reference == null) {

@@ -1,7 +1,10 @@
 package com.lvshen.demo.json.json2list;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Throwables;
 import com.google.gson.Gson;
 import com.lvshen.demo.json.SurveyConclusionTemplateOptionDto;
+import lombok.SneakyThrows;
 import org.junit.Test;
 
 import java.lang.reflect.ParameterizedType;
@@ -50,4 +53,22 @@ public class JsonUtils {
         List<SurveyConclusionTemplateOptionDto> templateOptionDtoList = list4Json(json, SurveyConclusionTemplateOptionDto.class);
         System.out.println(templateOptionDtoList);
     }
+
+    @SneakyThrows
+    public static String toJsonString(Object object) {
+        return objectMapper.writeValueAsString(object);
+    }
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
+    /**
+     * 将字符串转为对象
+     */
+    public static <T> T str2obj(String jsonStr, Class<T> cls) {
+        try {
+            return objectMapper.readValue(jsonStr, cls);
+        } catch (Exception e) {
+            throw Throwables.propagate(e);
+        }
+    }
+
 }

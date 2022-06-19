@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lvshen.demo.logexception.dao.ApiLogMapper">
+    <resultMap id="BaseResultMap" type="com.lvshen.demo.logexception.dao.ApiLog">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="model" jdbcType="VARCHAR" property="model" />
+        <result column="current_system" jdbcType="VARCHAR" property="currentSystem" />
+        <result column="req_type" jdbcType="VARCHAR" property="reqType" />
+        <result column="provider" jdbcType="VARCHAR" property="provider" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="request" jdbcType="LONGVARCHAR" property="request" />
+        <result column="result" jdbcType="LONGVARCHAR" property="result" />
+        <result column="deleted" jdbcType="TINYINT" property="deleted" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="ip_addr" jdbcType="VARCHAR" property="ipAddr" />
+        <result column="is_exception" jdbcType="VARCHAR" property="isException" />
+        <result column="param_type_name" jdbcType="VARCHAR" property="paramTypeName" />
+        <result column="route_name" jdbcType="VARCHAR" property="routeName" />
+        <result column="success_str" jdbcType="VARCHAR" property="successStr" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, model, current_system, req_type, provider, url, request, result, deleted, created_by, created_time,
+    updated_by, updated_time, ip_addr, is_exception, param_type_name, success_str, route_name
+    </sql>
+    <sql id="Base_Column_List_L">
+        l.id, l.model, l.current_system, l.req_type, l.provider, l.url, l.request, l.result, l.deleted, l.created_by, l.created_time,
+    l.updated_by, l.updated_time, l.ip_addr, l.is_exception, l.param_type_name, l.success_str, l.route_name
+    </sql>
+    <select id="listApiLogVo" parameterType="com.lvshen.demo.logexception.dao.ApiLogQueryParam" resultType="com.lvshen.demo.logexception.dao.ApiLogVo">
+        select <include refid="Base_Column_List_L" />, s.name as sysName, s.service_id as serviceId,
+        s.route_name as srmRouteName
+        from sys_api_log l
+        left join srm_systemmgr.biz_system_module s
+        on l.current_system = s.app_id
+        where l.deleted = 0
+        <if test="param.model != null and param.model !=''">
+            AND l.model = #{param.model}
+        </if>
+        <if test="param.id != null and param.id !=''">
+            AND l.id = #{param.id}
+        </if>
+        <if test="param.currentSystem != null and param.currentSystem !=''">
+            AND l.current_system like CONCAT(CONCAT('%',#{param.currentSystem}),'%')
+        </if>
+        <if test="param.reqType != null and param.reqType !=''">
+            AND l.req_type = #{param.reqType}
+        </if>
+        <if test="param.provider != null and param.provider !=''">
+            AND l.provider = #{param.provider}
+        </if>
+        <if test="param.url != null and param.url !=''">
+            AND l.url like CONCAT(CONCAT('%',#{param.url}),'%')
+        </if>
+        <if test="param.request != null and param.request !=''">
+            AND l.request like CONCAT(CONCAT('%',#{param.request}),'%')
+        </if>
+        <if test="param.result != null and param.result !=''">
+            AND l.result like CONCAT(CONCAT('%',#{param.result}),'%')
+        </if>
+        <if test="param.createdBy != null and param.createdBy !=''">
+            AND created_by = #{param.createdBy}
+        </if>
+        <if test="param.isException != null and param.isException !=''">
+            AND l.is_exception = #{param.isException}
+        </if>
+
+        <if test="param.createdTimeStart != null">
+            AND  l.a.created_time <![CDATA[>=]]> #{param.createdTimeStart}
+        </if>
+        <if test="param.createdTimeEnd != null">
+            AND  l.a.created_time <![CDATA[<=]]> #{param.createdTimeEnd}
+        </if>
+
+    </select>
+</mapper>
