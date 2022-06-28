@@ -1,8 +1,12 @@
 package com.lvshen.demo.logexception.dao;
 
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import com.alibaba.excel.util.CollectionUtils;
 import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageParams;
+import com.google.common.collect.ImmutableList;
 import com.lvshen.demo.catchexception.BusinessExceptionAssert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,9 @@ import java.util.List;
 public class ApiLogService {
     @Autowired
     private ApiLogMapper apiLogMapper;
+    @Autowired
+    private Snowflake snowflake;
+
 
 
     /**
@@ -32,7 +39,7 @@ public class ApiLogService {
     @Transactional(value = "defaultTransactionManager", rollbackFor = Exception.class)
     public void addApiLog(ApiLog apiLog) {
         BusinessExceptionAssert.checkNotNull(apiLog, "参数不能为空!!!");
-        apiLog.setId(String.valueOf(snowflakeIdWorker.nextId()));
+        apiLog.setId(String.valueOf(snowflake.nextId()));
         apiLog.unDeleted();
         apiLogMapper.insert(apiLog);
     }
@@ -50,7 +57,7 @@ public class ApiLogService {
         return apiLogMapper.updateById(apiLog);
     }
 
-    @Transactional(value = "defaultTransactionManager", rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public void updateNormalStatus(String logId) {
         ApiLog apiLog = new ApiLog();
         apiLog.setId(logId);
@@ -93,33 +100,22 @@ public class ApiLogService {
      * @param queryParam
      * @return 分页列表
      */
-    public Page<ApiLogVo> pageQueryApiLog(PageParams pageParams, ApiLogQueryParam queryParam) {
-        Page<ApiLogVo> pagination = PageExecutor.pagination(pageParams, () -> apiLogMapper.listApiLogVo(queryParam));
-        List<ApiLogVo> data = pagination.getData();
+    public PageInfo<ApiLogVo> pageQueryApiLog(PageParams pageParams, ApiLogQueryParam queryParam) {
+
+        List<ApiLogVo> apiLogVos = apiLogMapper.listApiLogVo(queryParam);
+        PageInfo<ApiLogVo> voPageInfo = new PageInfo<>(apiLogVos);
+        List<ApiLogVo> data = voPageInfo.getList();
         if (CollectionUtils.isEmpty(data)) {
-            return new Page<>();
+            return new PageInfo<>(ImmutableList.of());
         }
         for (ApiLogVo vo : data) {
             String createdBy = vo.getCreatedBy();
             String name = "lvshen";
             vo.setCreatedByName(name);
         }
-        return pagination;
+        return voPageInfo;
     }
 
-
-    /**
-     * 列表 api请求日志记录表
-     *
-     * @param queryParam
-     * @return list
-     */
-    public List<ApiLog> listApiLog(ApiLogQueryParam queryParam) {
-        ApiLog apiLog = BeanUtils.copy(queryParam, ApiLog.class);
-        apiLog.unDeleted();
-        List<ApiLog> entities = apiLogMapper.selectByExample(apiLog);
-        return entities;
-    }
 
     /**
      * 通过id列表批量查询 api请求日志记录表
