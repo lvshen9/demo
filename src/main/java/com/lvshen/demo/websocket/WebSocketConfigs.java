@@ -16,8 +16,8 @@ import javax.servlet.ServletException;
  * @date: 2022-6-30 8:59
  * @since JDK 1.8
  */
-@Configuration
-public class WebSocketConfig implements ServletContextInitializer {
+//@Configuration
+public class WebSocketConfigs implements ServletContextInitializer {
     /**
      * 这个bean的注册,用于扫描带有@ServerEndpoint的注解成为websocket,如果你使用外置的tomcat就不需要该配置文件
      */

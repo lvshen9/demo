@@ -37,7 +37,7 @@ import java.util.Enumeration;
  */
 @Slf4j
 @Aspect
-@Component
+//@Component
 public class ApiLogAspect {
 
     @Autowired
