@@ -20,7 +20,7 @@ import java.util.List;
  * @Description api请求日志记录表
  * @date 2022/05/18
  */
-@Service
+//@Service
 @Slf4j
 public class ApiLogService {
     @Autowired

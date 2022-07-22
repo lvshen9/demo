@@ -23,7 +23,7 @@ import java.util.List;
  * @since JDK 1.8
  */
 @Slf4j
-@Component
+//@Component
 public class LogExecutor {
     @Autowired
     private ApiLogService apiLogService;

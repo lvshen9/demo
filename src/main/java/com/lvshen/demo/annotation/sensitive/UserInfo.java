@@ -1,5 +1,7 @@
 package com.lvshen.demo.annotation.sensitive;
 
+import com.lvshen.demo.annotation.datamask.DataMasking;
+import com.lvshen.demo.annotation.datamask.DataMaskingFunc;
 import lombok.Data;
 
 /**
@@ -17,6 +19,7 @@ public class UserInfo {
     /**
      * 用户编号
      */
+    @DataMasking(maskFunc = DataMaskingFunc.ALL_MASK)
     private String useNo;
 
     /**
