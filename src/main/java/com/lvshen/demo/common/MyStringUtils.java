@@ -6,7 +6,9 @@ import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.CollectionUtils;
 
+import java.time.*;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,5 +51,37 @@ public class MyStringUtils {
     public static <T> List<T> removeNull(List<? extends T> oldList) {
         oldList.removeAll(Collections.singleton(null));
         return (List<T>) oldList;
+    }
+
+    /**
+     * 时间戳转换Date
+     *
+     * @param dateStr 时间戳的字符串
+     * @return
+     */
+    public static Date String2Date(String dateStr) {
+        if (StringUtils.isBlank(dateStr)) {
+            return null;
+        }
+        long dateTimeLong = String2Time(dateStr);
+
+        Instant timestamp = Instant.ofEpochMilli(dateTimeLong);
+        ZonedDateTime losAngelesTime = timestamp.atZone(ZoneId.of("Asia/Shanghai"));
+        LocalDateTime localDateTime = losAngelesTime.toLocalDateTime();
+        return Date.from(localDateTime.atZone(ZoneOffset.ofHours(8)).toInstant());
+    }
+
+    public static long String2Time(String dateStr) {
+        return Long.parseLong(dateStr);
+    }
+
+    /**
+     * LocalDateTime转Date
+     *
+     * @param localDateTime
+     * @return
+     */
+    public static Date localDateTimeConvertToDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.toInstant(ZoneOffset.of("+8")));
     }
 }
