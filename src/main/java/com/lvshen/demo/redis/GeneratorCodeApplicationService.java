@@ -7,6 +7,7 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,8 +32,6 @@ public class GeneratorCodeApplicationService {
 
     private static final String CODE_DATE_RECORD_KEY = "_date_record";
 
-    private static final long MAX_DOUBLE_NUMBER = 10;
-
     private String getRedisKey(String prefixToUpperCase, String prefix) {
         StringBuilder sb = new StringBuilder();
         sb.append(GET_NEXT_CODE_KEY).append("::");
@@ -43,9 +42,17 @@ public class GeneratorCodeApplicationService {
         return sb.toString();
     }
 
-    public String getPayCode(String moduleName) {
-        String redisKey = getRedisKey(moduleName, "PAY");
-        return generateCode(moduleName, redisKey);
+    /**
+     * 通用单号生成器   格式 前缀 + YYMMDD + 序号
+     * 列如    generatorCode("D",4)，当前日期为：2022-08-12
+     * 生成为：D202208120001
+     * @param prefix 前缀
+     * @param digit  序号  输入数字几，则生成几位序号
+     * @return
+     */
+    public String generatorCode(String prefix, int digit) {
+        String redisKey = getRedisKey(prefix, "GENERAL_CODE");
+        return generateCode(prefix, redisKey, digit);
     }
 
     /**
@@ -54,13 +61,13 @@ public class GeneratorCodeApplicationService {
      * @param prefix
      * @return
      */
-    private String generateCode(String prefix, String redisKey) {
+    private String generateCode(String prefix, String redisKey, int digit) {
         String dateStr = getTodayStr();
 
-        String suffixCodeStr = getSuffixCodeStr(redisKey);
+        String suffixCodeStr = getSuffixCodeStr(redisKey, digit);
 
         String[] codes = {prefix, dateStr, suffixCodeStr};
-        return Stream.of(codes).collect(Collectors.joining());
+        return String.join("", codes);
     }
 
     private String getTodayStr() {
@@ -104,19 +111,15 @@ public class GeneratorCodeApplicationService {
         return value;
     }
 
-    private String getSuffixCodeStr(String key) {
-        StringBuilder sb = new StringBuilder();
+    private String getSuffixCodeStr(String key, int digit) {
         long code = getSuffixCode(key);
-        if (code < MAX_DOUBLE_NUMBER) {
-            return sb.append("00").append(code).toString();
-        }
-        if (isDoubleNumber(code)) {
-            return sb.append("0").append(code).toString();
-        }
-        return String.valueOf(code);
+        return getDigitNumber((int) code, digit);
     }
 
-    private boolean isDoubleNumber(long code) {
-        return (code > 10 || code == 10) && code < 100;
+    public String getDigitNumber(int number, int digit) {
+        NumberFormat formatter = NumberFormat.getNumberInstance();
+        formatter.setMinimumIntegerDigits(digit);
+        formatter.setGroupingUsed(false);
+        return formatter.format(number);
     }
 }
