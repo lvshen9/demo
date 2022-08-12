@@ -1,0 +1,25 @@
+clusterServersConfig:
+  idleConnectionTimeout: 10000
+  pingTimeout: 1000
+  connectTimeout: 5000
+  timeout: 3000
+  retryAttempts: 3
+  retryInterval: 1500
+  password: xxxx
+  subscriptionsPerConnection: 5 #单个连接最大订阅数量
+  slaveSubscriptionConnectionMinimumIdleSize: 1
+  slaveSubscriptionConnectionPoolSize: 50
+  slaveConnectionMinimumIdleSize: 32
+  slaveConnectionPoolSize: 64
+  masterConnectionMinimumIdleSize: 32
+  masterConnectionPoolSize: 64
+  readMode: "SLAVE"
+  nodeAddresses:
+    - "redis://10.xx.xx.xx:6379"
+    - "redis://10.xx.xx.xx:6379"
+    - "redis://10.xx.xx.xx:6379"
+    - "redis://10.xx.xx.xx:6380"
+    - "redis://10.xx.xx.xx:6380"
+    - "redis://10.xx.xx.xx:6380"
+  scanInterval: 1000
+transportMode: NIO
