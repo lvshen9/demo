@@ -20,22 +20,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public class TestLimiterController {
 
-    private static final String MESSAGE = "{\"code\":\"400\",\"msg\":\"FAIL\",\"desc\":\"触发限流\"}";
-
-    AtomicInteger atomicInteger = new AtomicInteger();
-
     /**
-     * 10s限制请求5次
-     * @param request
+     *
+     * @param
      * @return
      * @throws Exception
      */
     @ResponseBody
     @RequestMapping("ratelimiter")
-    @RateLimiter(key = "ratedemo:1.0.0", limit = 5, expire = 10, message = MESSAGE)
-    public String sendPayment(HttpServletRequest request) throws Exception {
-        int count = atomicInteger.incrementAndGet();
-        return "正常请求" + count;
+    @RateLimiter(needUserLimit = true)
+    public String testLimit() {
+        return "限流注解测试专用";
     }
 
 }

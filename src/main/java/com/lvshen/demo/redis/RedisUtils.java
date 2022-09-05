@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -106,6 +107,20 @@ public class RedisUtils {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean leftPush(String key, Object value) {
+        try {
+            redisTemplate.opsForList().leftPush(key, value);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Object blockRightPop(String key) {
+        Object o = redisTemplate.opsForList().rightPop(key);
+        return o;
     }
 
     /**

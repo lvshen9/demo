@@ -87,6 +87,48 @@ public class ApiLog implements Serializable {
     private String successStr;
 
     /**
+     * param_type_name:参数类型
+     */
+    @Column(name = "param_type_name")
+    private String paramTypeName;
+
+    /**
+     * route_name:路由地址
+     */
+    @Column(name = "route_name")
+    private String routeName;
+
+    /**
+     * retry:重试次数
+     */
+    @Column(name = "retry")
+    private Long retry;
+
+    /**
+     * allow_retry:允许重试次数
+     */
+    @Column(name = "allow_retry")
+    private Long allowRetry;
+
+    /**
+     * need_auto:是否需要重试 0-否
+     */
+    @Column(name = "need_auto")
+    private String needAuto;
+
+    /**
+     * method_desc:方法描述
+     */
+    @Column(name = "method_desc")
+    private String methodDesc;
+
+    /**
+     * invoke_method:父层调用方法
+     */
+    @Column(name = "invoke_method")
+    private String invokeMethod;
+
+    /**
      * deleted:是否删除
      */
     @Column(name = "deleted")
@@ -98,18 +140,6 @@ public class ApiLog implements Serializable {
     @Column(name = "created_by")
     @CreatedBy
     private String createdBy;
-
-    /**
-     * param_type_name:参数类型
-     */
-    @Column(name = "param_type_name")
-    private String paramTypeName;
-
-    /**
-     * route_name:路由地址
-     */
-    @Column(name = "route_name")
-    private String routeName;
 
     /**
      * created_time:创建时间
@@ -139,5 +169,13 @@ public class ApiLog implements Serializable {
 
     public void hasDeleted() {
         this.deleted = 1;
+    }
+
+    public void exception() {
+        this.isException = "1";
+    }
+
+    public void notException() {
+        this.isException = "0";
     }
 }
