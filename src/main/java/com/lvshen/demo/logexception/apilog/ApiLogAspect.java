@@ -12,7 +12,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -24,7 +23,10 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: AccessAspect
@@ -46,6 +48,11 @@ public class ApiLogAspect {
     @Value("${spring.application.name}")
     private String applicationName;
 
+    @Autowired
+    private ExceptionResultQueueService exceptionResultQueueService;
+
+    private static final String EXECUTOR_METHOD = "executorMethod";
+
     /**
      * 切点.
      */
@@ -64,11 +71,14 @@ public class ApiLogAspect {
     @Around("authPoint()")
     public Object flowAspect(ProceedingJoinPoint joinPoint) throws Throwable {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
-        EnableLog enableLog = method.getAnnotation(EnableLog.class);
-        OperationType type = enableLog.type();
-        String provider = enableLog.provider();
-        ModelType model = enableLog.model();
-        String currentSystem = enableLog.currentSystem();
+        EnableLog annotation = method.getAnnotation(EnableLog.class);
+        OperationType type = annotation.type();
+        String provider = annotation.provider();
+        ModelType model = annotation.model();
+        long allowRetry = annotation.allowRetry();
+        String needAuto = annotation.needAuto();
+        String desc = annotation.desc();
+        String currentSystem = annotation.currentSystem();
 
         Object[] args = joinPoint.getArgs();
         Type[] genericParameterTypes = method.getGenericParameterTypes();
@@ -87,7 +97,7 @@ public class ApiLogAspect {
         if (StringUtils.isBlank(currentSystem)) {
             currentSystem = getCurrentSystem();
         }
-        String successStr = enableLog.successStr();
+        String successStr = annotation.successStr();
 
         //获取类的字节码对象，通过字节码对象获取方法信息
         Class<?> targetCls = joinPoint.getTarget().getClass();
@@ -96,6 +106,11 @@ public class ApiLogAspect {
         //获取目标方法名(目标类型+方法名)
         String targetClsName = targetCls.getName();
         String targetObjectMethodName = targetClsName + "." + ms.getName();
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        List<StackTraceElement> stackTraceElements = Arrays.asList(stackTrace);
+        List<String> methodList = stackTraceElements.stream().map(StackTraceElement::getMethodName).collect(Collectors.toList());
+        StackTraceElement stackTraceElement = stackTraceElements.get(16);
+        String invokeMethodStr = stackTraceElement.getClassName().concat(".").concat(stackTraceElement.getMethodName());
 
         apiLog.setCurrentSystem(currentSystem);
         apiLog.setReqType(type.name());
@@ -104,26 +119,38 @@ public class ApiLogAspect {
         String request = args.length == 0 ? StringUtils.EMPTY : JsonUtils.toJsonString(args[0]);
         apiLog.setRequest(request);
         apiLog.setSuccessStr(successStr);
+        apiLog.setMethodDesc(desc);
         apiLog.setIpAddr(ipAddress);
+        apiLog.setAllowRetry(allowRetry);
+        apiLog.setNeedAuto(needAuto);
+        apiLog.setInvokeMethod(invokeMethodStr);
         apiLog.unDeleted();
+        boolean isNeedAutoRetry = "1".equals(needAuto);
         try {
             result = joinPoint.proceed();
             String resultStr = JsonUtils.toJsonString(result);
             apiLog.setResult(resultStr);
             if (StringUtils.isBlank(successStr) || resultStr.contains(successStr)) {
-                apiLog.setIsException("0");
+                apiLog.notException();
             } else {
-                apiLog.setIsException("1");
+                apiLog.exception();
             }
         } catch (Exception e) {
             String resultException = (e instanceof NullPointerException) ? "[NullPointerException]" + JsonUtils.toJsonString(e.getCause()) : e.getMessage();
             apiLog.setResult(resultException);
-            apiLog.setIsException("1");
+            apiLog.exception();
         }
-        try {
-            apiLogService.addApiLog(apiLog);
-        } catch (Exception e) {
-            log.error("日志插入异常", e);
+        if (!methodList.contains(EXECUTOR_METHOD)) {
+            try {
+                apiLogService.addApiLog(apiLog);
+            } catch (Exception e) {
+                log.error("日志插入异常", e);
+            }
+            //异常方法日志id存入 redis队列
+            String apiLogId = apiLog.getId();
+            if (StringUtils.isNotBlank(apiLogId) && "1".equals(apiLog.getIsException()) && isNeedAutoRetry) {
+                exceptionResultQueueService.pushExceptionQueue(apiLogId);
+            }
         }
         return result;
     }

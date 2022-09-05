@@ -43,5 +43,19 @@ public @interface EnableLog {
      *
      * @return
      */
-    int allowRetry() default -1;
+    long allowRetry() default -1;
+
+    /**
+     * 是否自动重试 0-否
+     *
+     * @return
+     */
+    String needAuto() default "0";
+
+    /**
+     * 方法描述
+     *
+     * @return
+     */
+    String desc() default StringUtils.EMPTY;
 }
