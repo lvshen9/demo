@@ -1,5 +1,6 @@
 package com.lvshen.demo.authenticatedstreams.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lvshen.demo.authenticatedstreams.entity.ProcessRecord;
 import com.lvshen.demo.authenticatedstreams.mapper.ProcessMapper;
@@ -135,6 +136,12 @@ public class ProcessRecordTransactionThread {
         QueryWrapper<ProcessRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("status", Arrays.asList("1", "2"));
         List<ProcessRecord> list = processMapper.selectList(queryWrapper);
+
+        LambdaQueryWrapper<ProcessRecord> lambdaUpdateWrapper = new LambdaQueryWrapper<>();
+        lambdaUpdateWrapper.in(ProcessRecord::getStatus, Arrays.asList("1", "2"));
+        lambdaUpdateWrapper.like(ProcessRecord::getMemo, "同意");
+        lambdaUpdateWrapper.orderByDesc(true, ProcessRecord::getId);
+        List<ProcessRecord> processRecords = processMapper.selectList(lambdaUpdateWrapper);
 
         TransactionStatus transaction = dataSourceTransactionManager.getTransaction(transactionDefinition);
         try {
