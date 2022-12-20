@@ -1,5 +1,6 @@
 package com.lvshen.demo.catchexception;
 
+import com.google.common.base.Strings;
 import org.springframework.lang.Nullable;
 
 
@@ -16,6 +17,12 @@ public class BusinessExceptionAssert {
     public static void checkArgument(boolean expression, @Nullable Object errorMessage) {
         if (!expression) {
             throw new BusinessException(String.valueOf(errorMessage));
+        }
+    }
+
+    public static void checkArgument(boolean b, @Nullable String errorMessageTemplate, @Nullable Object p1, @Nullable Object p2) {
+        if (!b) {
+            throw new BusinessException(Integer.parseInt("700"), Strings.lenientFormat(errorMessageTemplate, p1, p2));
         }
     }
 

@@ -13,6 +13,12 @@ import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.lvshen.demo.annotation.easyexport.DocumentInfo;
+import com.lvshen.demo.annotation.easyexport.ExportToDocumentVo;
+import com.lvshen.demo.annotation.easyexport.utils.*;
+import com.lvshen.demo.annotation.sensitive.SpringContextHolder;
+import com.lvshen.demo.json.json2list.JsonUtils;
+import com.lvshen.demo.redis.RedisUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -26,10 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -49,12 +52,13 @@ import java.util.concurrent.Executor;
 @Slf4j
 @Component
 public class EasyExcelAsyncUtils {
-    @Autowired
-    private Executor taskAsyncExecutor;
 
     private static final int PAGE_LIMIT = 10000;
+    public static final RedisUtils redisApiClient = SpringContextHolder.getBean(RedisUtils.class);
+    private static final String EXPORT_REDIS_KEY = "sc:common:async:export:excel:%s:%s:%s";
 
-    public void asyncExportExcel(HttpServletResponse response, List<? extends BaseRowModel> list, Class clazz, String fileName, String sheetName) {
+    public static ByteArrayOutputStream asyncExportExcel(HttpServletResponse response, List<? extends BaseRowModel> list, Class clazz, String fileName, String sheetName, Executor taskAsyncExecutor, String taskId) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         StopWatch start = TimeWatchUtils.start();
         fileName = StringUtils.isBlank(fileName) ? "excel文件导出" : fileName;
         int size = list.size();
@@ -105,6 +109,11 @@ public class EasyExcelAsyncUtils {
                             if (count == 0 && queue.size() == 0) {
                                 break;
                             }
+                            if (countSize / sheetNo == 2) {
+                                ExportToDocumentVo vo = getExportToDocumentVoByTaskId(taskId);
+                                vo.setProgress("50");
+                                createOrUpdateToRedis(vo);
+                            }
                         }
                     });
                     try {
@@ -131,9 +140,11 @@ public class EasyExcelAsyncUtils {
         }
         TimeWatchUtils.stop(start, "asyncExportExcel");
         log.info("导出结束!");
+        return byteArrayOutputStream;
     }
 
-    private static void resetResponse(HttpServletResponse response, Exception e) {
+
+    public static void resetResponse(HttpServletResponse response, Exception e) {
         response.reset();
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
@@ -147,7 +158,7 @@ public class EasyExcelAsyncUtils {
         }
     }
 
-    private static void buildResponse(HttpServletResponse response, String fileName) throws
+    public static void buildResponse(HttpServletResponse response, String fileName) throws
             UnsupportedEncodingException {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
@@ -169,26 +180,27 @@ public class EasyExcelAsyncUtils {
     }
 
 
-    static class ImportExcelListener<T> extends AnalysisEventListener<T> {
+static class ImportExcelListener<T> extends AnalysisEventListener<T> {
 
-        @Getter
-        private final List<T> classList = new ArrayList<>();
+    @Getter
+    private final List<T> classList = new ArrayList<>();
 
-        public ImportExcelListener() {
-            super();
-            classList.clear();
-        }
-
-        @Override
-        public void invoke(T aClass, AnalysisContext analysisContext) {
-            classList.add(aClass);
-        }
-
-        @Override
-        public void doAfterAllAnalysed(AnalysisContext analysisContext) {
-
-        }
+    public ImportExcelListener() {
+        super();
+        classList.clear();
     }
+
+    @Override
+    public void invoke(T aClass, AnalysisContext analysisContext) {
+        classList.add(aClass);
+    }
+
+    @Override
+    public void doAfterAllAnalysed(AnalysisContext analysisContext) {
+
+    }
+
+}
 
     public static HorizontalCellStyleStrategy getStyleStrategy() {
         // 头的策略
@@ -221,6 +233,86 @@ public class EasyExcelAsyncUtils {
         contentWriteCellStyle.setWriteFont(contentWriteFont);
         // 这个策略是 头是头的样式 内容是内容的样式 其他的策略可以自己实现
         return new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
+    }
+
+    private static ExportToDocumentVo getExportToDocumentVoByTaskId(String taskId) {
+        String redisKey = getExportRedisKey();
+        String voStr = (String) redisApiClient.hget(redisKey, taskId);
+        return JsonUtils.str2obj(voStr, ExportToDocumentVo.class);
+    }
+
+    public static String startExportToDocument(String fileName, String taskId, int saveTime) {
+        ExportToDocumentVo vo = new ExportToDocumentVo();
+        vo.setExportStartDate(new Date());
+        if (StringUtils.isBlank(fileName)) {
+            fileName = "Excel导出";
+        }
+        vo.setFilename(fileName.concat(".xlsx"));
+        vo.setProgress(SystemConstant.ZERO);
+        vo.setTaskId(taskId);
+        vo.setSaveTime(saveTime);
+        return createOrUpdateToRedis(vo);
+    }
+
+    public static String endExportToDocument(DocumentInfo info) {
+        ExportToDocumentVo vo = getExportToDocumentVoByTaskId(info.getTaskId());
+        vo.setFileId(info.getFileId());
+        vo.setProgress("100");
+        vo.setExportEndDate(new Date());
+        vo.setMimeType(info.getMimeType());
+        vo.setPath(info.getPath());
+        vo.setSize(String.valueOf(info.getSize()));
+        vo.setSaveTime(info.getSaveTime());
+        return createOrUpdateToRedis(vo);
+    }
+
+    /**
+     * 更新到Redis
+     *
+     * @param vo
+     * @return
+     */
+    private static String createOrUpdateToRedis(ExportToDocumentVo vo) {
+        String redisKey = getExportRedisKey();
+        if (vo != null) {
+            String vo2Json = JsonUtils.toJsonString(vo);
+            String taskId = vo.getTaskId();
+            Integer saveTime = vo.getSaveTime();
+            redisApiClient.hset(redisKey, taskId, vo2Json, saveTime * 60 * 60);
+            return "存入Redis成功";
+        }
+        return "未存入redis，无文件信息";
+    }
+
+    /**
+     * 获取redis key
+     *
+     * @return
+     */
+    public static String getExportRedisKey() {
+        //获取当前租户
+        String tenantId = "0001";
+        if (StringUtils.isBlank(tenantId)) {
+            tenantId = "1000000000";
+        }
+        String module = ScUtils.getCurrentSystem();
+        String currentUserAccount = getCurrentUserAccount();
+        if (StringUtils.isBlank(currentUserAccount)) {
+            currentUserAccount = "admin";
+        }
+        String key = String.format(EXPORT_REDIS_KEY, tenantId, module, currentUserAccount);
+        log.info("使用的key: [{}]", key);
+        return key;
+    }
+
+    private static String getCurrentUserAccount() {
+        AuthUser currentUser = CurrentRuntimeContext.getCurrentUser();
+        String currentUserAccount;
+        currentUserAccount = Optional.ofNullable(currentUser).orElseGet(AuthUser::new).getUsername();
+        if (StringUtils.isBlank(currentUserAccount)) {
+            currentUserAccount = "admin";
+        }
+        return currentUserAccount;
     }
 
 
