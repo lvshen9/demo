@@ -1,14 +1,18 @@
 package com.lvshen.demo.redis;
 
 import cn.hutool.core.date.DateUtil;
+import com.lvshen.demo.catchexception.BusinessException;
+import io.netty.util.AsciiString;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RAtomicLong;
+import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,6 +26,8 @@ import java.util.stream.Stream;
  */
 @Component
 public class GeneratorCodeApplicationService {
+    private static final String REDIS_LOCK = "demo_code_generator_lock_";
+    private static final String CODE_HISTORY_KEY = "_history";
     @Autowired
     private RedisUtils redisUtils;
 
@@ -52,6 +58,20 @@ public class GeneratorCodeApplicationService {
      */
     public String generatorCode(String prefix, int digit) {
         String redisKey = getRedisKey(prefix, "GENERAL_CODE");
+        return generateCode(prefix, redisKey, digit);
+    }
+
+    /**
+     * 单号生成
+     * 增加模块变量，防止前缀冲突
+     *
+     * @param prefix
+     * @param module
+     * @param digit
+     * @return
+     */
+    public String generatorCode(String prefix, String module, int digit) {
+        String redisKey = getRedisKey(prefix, "GENERAL_CODE::".concat(module));
         return generateCode(prefix, redisKey, digit);
     }
 
@@ -93,21 +113,37 @@ public class GeneratorCodeApplicationService {
      * @param key
      * @return
      */
-    private synchronized long getSuffixCode(String key) {
+    private long getSuffixCode(String key) {
         RedissonClient redissonClient = redissonService.getRedissonClient();
         RAtomicLong atomicVar = redissonClient.getAtomicLong(key);
         String todayStr = getTodayStr();
         String codeRecord = getCodeRecord(key);
-        if (!atomicVar.isExists()) {
-            atomicVar.set(1);
-        }
-        if (StringUtils.isNotBlank(codeRecord)) {
-            if (!isSameDay(todayStr, codeRecord)) {
-                atomicVar.set(1);
+        RLock lock = redissonClient.getLock(REDIS_LOCK.concat(key));
+        long value = 0;
+        try {
+            if (lock.tryLock(10, 10, TimeUnit.SECONDS)) {
+                if (!atomicVar.isExists()) {
+                    atomicVar.set(0);
+                }
+                if (StringUtils.isNotBlank(codeRecord)) {
+                    if (!isSameDay(todayStr, codeRecord)) {
+                        atomicVar.set(0);
+                    }
+                }
+                //记录日期
+                saveCodeRecord(key, todayStr);
+                value = atomicVar.incrementAndGet();
+                //记录历史
+                String historyKey = key.concat(CODE_HISTORY_KEY);
+                redisUtils.hset(historyKey, todayStr, String.valueOf(value), 30 * 24 * 60 * 60);
+            }
+        } catch (Exception e) {
+            throw new BusinessException(500, String.format("单号生成异常,key:[%s]", key));
+        } finally {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
+                lock.unlock();
             }
         }
-        saveCodeRecord(key, todayStr);
-        long value = atomicVar.incrementAndGet();
         return value;
     }
 
