@@ -3,6 +3,7 @@ package com.lvshen.demo.filter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -47,13 +48,12 @@ public class StringJsonUtils {
      * @return 去掉首尾空格的json
      */
     public static JSONObject jsonStrTrim(String jsonStr) {
-        JSONObject reagobj = JSONObject.parseObject(jsonStr);
-        Set<String> keySet = reagobj.keySet();
+        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+        Set<String> keySet = jsonObject.keySet();
         Iterator<String> itt = keySet.iterator();
         while (itt.hasNext()) {
             String key = itt.next();
-            Object obj = reagobj.get(key);
-
+            Object obj = jsonObject.get(key);
             if (obj instanceof JSONObject) {
                 Set<String> keySets = ((JSONObject) obj).keySet();
                 Iterator<String> iterator = keySets.iterator();
@@ -61,16 +61,12 @@ public class StringJsonUtils {
                     String key1 = iterator.next();
                     Object o = ((JSONObject) obj).get(key1);
                     if (o instanceof String) {
-                        if (o == null) {
-                            continue;
-                        } else if ("".equals(o.toString().trim())) {
-                            continue;
-                        } else {
+                        if (StringUtils.isNotBlank(o.toString().trim())) {
                             ((JSONObject) obj).put(key1, o.toString().trim());
                         }
                     }
                 }
-                reagobj.put(key, obj);
+                jsonObject.put(key, obj);
             } else if (obj instanceof JSONArray) {
                 for (int i = 0; i < ((JSONArray) obj).size(); i++) {
                     Object o = ((JSONArray) obj).get(i);
@@ -81,38 +77,25 @@ public class StringJsonUtils {
                             String key1 = iterator.next();
                             Object o1 = ((JSONObject) o).get(key1);
                             if (o1 instanceof String) {
-                                if (o1 == null) {
-                                    continue;
-                                } else if ("".equals(o1.toString().trim())) {
-                                    continue;
-                                } else {
+                                if (StringUtils.isNotBlank(o.toString().trim())) {
                                     ((JSONObject) o).put(key1, o1.toString().trim());
                                 }
-
                             }
                         }
                     } else if (o instanceof String) {
-                        if (o == null) {
-                            continue;
-                        } else if ("".equals(o.toString().trim())) {
-                            continue;
-                        } else {
+                        if (StringUtils.isNotBlank(o.toString().trim())) {
                             ((JSONArray) obj).set(i, ((String) o).trim());
                         }
                     }
                 }
-                reagobj.put(key, obj);
+                jsonObject.put(key, obj);
             } else if (obj instanceof String) {
-                if (obj == null) {
-                    continue;
-                } else if ("".equals(obj.toString().trim())) {
-                    continue;
-                } else {
-                    reagobj.put(key, obj.toString().trim());
+                if (StringUtils.isNotBlank(obj.toString().trim())) {
+                    jsonObject.put(key, obj.toString().trim());
                 }
             }
         }
-        return reagobj;
+        return jsonObject;
     }
 
     /**
