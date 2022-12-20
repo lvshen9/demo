@@ -54,7 +54,7 @@ public class CodeUtils {
         String suffixCodeStr = getSuffixCodeStr(prefix, datePattern, module, validateTenantId, digit);
         String todayStr = getTodayStr(datePattern);
         String[] codes = {prefix, todayStr, suffixCodeStr};
-        return Stream.of(codes).collect(Collectors.joining());
+        return String.join("", codes);
     }
 
     private static String getSuffixCodeStr(String prefix, String datePattern, String module, boolean validateTenantId, int digit) {
