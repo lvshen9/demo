@@ -68,7 +68,7 @@ public class Test {
         StudentDto studentDto = new StudentDto();
         studentDto.setId("99");
         System.out.println(studentDto);
-        BeanUtil.copyProperties(studentVo,studentDto,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        //BeanUtil.copyProperties(studentVo,studentDto,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
         System.out.println(studentDto);
     }
 
