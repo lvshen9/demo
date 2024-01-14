@@ -7,15 +7,18 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.Collection;
 
 /**
  * Description:Java8 stream流工具类
@@ -84,6 +87,16 @@ public class MyCollectionUtils {
         return Maps.newHashMapWithExpectedSize(16);
     }
 
+
+    public static <K, V> Map<K, V> concurrentMapPut(ConcurrentMap<K, V> concurrentMap, K key, V value) {
+        V v = concurrentMap.get(key);
+        if (v == null) {
+
+        }
+        concurrentMap.putIfAbsent(key, value);
+        return concurrentMap;
+    }
+
     /**
      * 可以使用Java 8的流(Stream)和flatMap()方法将 List<List<String>> 转换成 List<String>
      *
@@ -119,8 +132,6 @@ public class MyCollectionUtils {
                 .map(targetType::cast)
                 .collect(Collectors.toList());
     }
-
-
     /**
      * map转换成list
      * 示例：
@@ -172,7 +183,7 @@ public class MyCollectionUtils {
      * @param <V>
      * @return
      */
-    public <K, V> List<V> getMapFirstValue2List(Map<K, List<V>> maps) {
+    public static <K, V> List<V> getMapFirstValue2List(Map<K, List<V>> maps) {
         if (MapUtils.isEmpty(maps)) {
             return ImmutableList.of();
         }
@@ -184,7 +195,6 @@ public class MyCollectionUtils {
                 // 收集到新的List中
                 .collect(Collectors.toList());
     }
-
 
     /**
      * 将list中BigDecimal属性元素累加，过滤掉BigDecimal值为null的元素
@@ -213,7 +223,10 @@ public class MyCollectionUtils {
      * @param <K>
      * @param <V>
      */
-    public static <T, K, V> Map<K, V> extractPropertyToMap(List<T> list, Function<T, K> keyExtractor, Function<T, V> valueExtractor) {
+    public static <T, K, V> Map<K, V> list2Map(List<T> list, Function<T, K> keyExtractor, Function<T, V> valueExtractor) {
+        if (CollectionUtils.isEmpty(list)) {
+            return Maps.newHashMap();
+        }
         return list.stream()
                 .collect(Collectors.toMap(keyExtractor, valueExtractor));
     }
@@ -226,7 +239,96 @@ public class MyCollectionUtils {
      * @param <T>
      * @param <K>
      */
-    public static <T, K> Map<K, T> extractEntityToMap(List<T> list, Function<T, K> keyExtractor) {
-        return extractPropertyToMap(list, keyExtractor, Function.identity());
+    public static <T, K> Map<K, T> listEntity2Map(List<T> list, Function<T, K> keyExtractor) {
+        return list2Map(list, keyExtractor, Function.identity());
     }
-}
+
+    @SafeVarargs
+    public static <T> List<T> concatLists(List<T>... lists) {
+        return Arrays.stream(lists)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 按多个维度的属性分组，并对一个指定的属性 求个，返回map
+     * @param list               待分组的list
+     * @param groupByFields      分组的字段列表
+     * @param sumField           求和的字段，目前支持bigdecimal
+     * @return                   map, key:分组的list; value: 和值
+     * @param <T>
+     */
+    public static <T> Map<List<Object>, BigDecimal> groupAndSum(List<T> list, List<Function<T, Object>> groupByFields, Function<T, BigDecimal> sumField) {
+        return list.stream()
+                .filter(item -> sumField.apply(item) != null)
+                .collect(Collectors.groupingBy(
+                        item -> groupByFields.stream()
+                                .map(field -> field.apply(item))
+                                .collect(Collectors.toList()),
+                        Collectors.reducing(BigDecimal.ZERO, sumField, BigDecimal::add)
+                ));
+    }
+
+    public static <T> Map<String, BigDecimal> groupStrKeyAndSum(List<T> list, List<Function<T, Object>> groupByFields, Function<T, BigDecimal> sumField) {
+        return list.stream()
+                .filter(item -> sumField.apply(item) != null)
+                .collect(Collectors.groupingBy(
+                        item -> groupByFields.stream()
+                                .map(field -> field.apply(item))
+                                .map(Object::toString)
+                                .collect(Collectors.joining("|")),
+                        Collectors.reducing(BigDecimal.ZERO, sumField, BigDecimal::add)
+                ));
+    }
+
+    /**
+     * 按指定的comparator排序
+     * @param list
+     * @param comparator
+     * @param <T>
+     */
+    public static <T> void sortedByComparator(List<T> list, Comparator<T> comparator) {
+        list.sort(comparator);
+    }
+
+    private static boolean isDuplicate(List<String> list, List<List<String>> lists) {
+        for (List<String> innerList : lists) {
+            if (innerList != list && innerList.containsAll(list)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 取出相同的元素 如List<List<String>> = [[1,2,3],[2,3,4],[4,3]]
+     * 相同的元素为[3]
+     * @param lists
+     * @return
+     */
+    public static List<String> listDuplicateData(List<List<String>> lists) {
+        List<String> result = new ArrayList<>(lists.get(0));
+
+        for (List<String> innerList : lists) {
+            result.retainAll(innerList);
+        }
+        return result;
+    }
+
+    public static <T> Map<String, List<T>> groupByMultipleProperties(List<T> list, Function<T, String>... groupingFunctions) {
+        return list.stream()
+                .collect(Collectors.groupingBy(
+                        t -> {
+                            StringBuilder keyBuilder = new StringBuilder();
+                            for (Function<T, String> groupingFunction : groupingFunctions) {
+                                String propertyValue = groupingFunction.apply(t);
+                                keyBuilder.append(propertyValue != null ? propertyValue : "null").append("|");
+                            }
+                            return keyBuilder.toString();
+                        }
+                ));
+    }
+
+
+
+    }

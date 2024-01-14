@@ -1,7 +1,5 @@
 package com.lvshen.demo.mapstruct;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
