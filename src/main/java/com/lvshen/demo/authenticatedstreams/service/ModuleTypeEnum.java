@@ -14,7 +14,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ModuleTypeEnum {
-    HOLIDAY("请假", "HOLIDAY");
+    HOLIDAY("请假", "HOLIDAY"),
+    /**
+     * 默认模块
+     */
+    SRM("供应链管理系统", "SRM");
 
     private String desc;
     private String value;

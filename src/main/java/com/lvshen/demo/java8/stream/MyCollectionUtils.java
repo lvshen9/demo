@@ -132,6 +132,7 @@ public class MyCollectionUtils {
                 .map(targetType::cast)
                 .collect(Collectors.toList());
     }
+
     /**
      * map转换成list
      * 示例：
@@ -198,10 +199,11 @@ public class MyCollectionUtils {
 
     /**
      * 将list中BigDecimal属性元素累加，过滤掉BigDecimal值为null的元素
+     *
      * @param list
      * @param mapper
-     * @return
      * @param <T>
+     * @return
      */
     public static <T> BigDecimal sumBigDecimalList(List<T> list, Function<T, BigDecimal> mapper) {
         return list.stream()
@@ -215,13 +217,14 @@ public class MyCollectionUtils {
      * List<Person> personList = ... // populate list with Person objects
      * Map<String, Integer> ageMap = ListUtils.extractPropertyToMap(personList, Person::getName, Person::getAge);
      * Map<String, Person> personMap = ListUtils.extractPropertyToMap(personList, Person::getName, Function.identity());
+     *
      * @param list
      * @param keyExtractor
      * @param valueExtractor
-     * @return
      * @param <T>
      * @param <K>
      * @param <V>
+     * @return
      */
     public static <T, K, V> Map<K, V> list2Map(List<T> list, Function<T, K> keyExtractor, Function<T, V> valueExtractor) {
         if (CollectionUtils.isEmpty(list)) {
@@ -233,11 +236,12 @@ public class MyCollectionUtils {
 
     /**
      * list转map，map的key为对象的某个属性，value为list的对象
+     *
      * @param list
      * @param keyExtractor
-     * @return
      * @param <T>
      * @param <K>
+     * @return
      */
     public static <T, K> Map<K, T> listEntity2Map(List<T> list, Function<T, K> keyExtractor) {
         return list2Map(list, keyExtractor, Function.identity());
@@ -252,11 +256,12 @@ public class MyCollectionUtils {
 
     /**
      * 按多个维度的属性分组，并对一个指定的属性 求个，返回map
-     * @param list               待分组的list
-     * @param groupByFields      分组的字段列表
-     * @param sumField           求和的字段，目前支持bigdecimal
-     * @return                   map, key:分组的list; value: 和值
+     *
+     * @param list          待分组的list
+     * @param groupByFields 分组的字段列表
+     * @param sumField      求和的字段，目前支持bigdecimal
      * @param <T>
+     * @return map, key:分组的list; value: 和值
      */
     public static <T> Map<List<Object>, BigDecimal> groupAndSum(List<T> list, List<Function<T, Object>> groupByFields, Function<T, BigDecimal> sumField) {
         return list.stream()
@@ -283,6 +288,7 @@ public class MyCollectionUtils {
 
     /**
      * 按指定的comparator排序
+     *
      * @param list
      * @param comparator
      * @param <T>
@@ -303,6 +309,7 @@ public class MyCollectionUtils {
     /**
      * 取出相同的元素 如List<List<String>> = [[1,2,3],[2,3,4],[4,3]]
      * 相同的元素为[3]
+     *
      * @param lists
      * @return
      */
@@ -330,5 +337,4 @@ public class MyCollectionUtils {
     }
 
 
-
-    }
+}
