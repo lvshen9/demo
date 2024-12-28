@@ -203,8 +203,8 @@ public class RedisSpringTest {
     private RedissonClient getRedissonClient() {
         Config config = new Config();
         SingleServerConfig singleServerConfig = config.useSingleServer();
-        singleServerConfig.setAddress("redis://192.168.42.128:6379");
-        singleServerConfig.setPassword("lvshen");
+        singleServerConfig.setAddress("redis://192.168.0.111:16379");
+        singleServerConfig.setPassword("1q1w1e1r");
         RedissonClient redissonClient = Redisson.create(config);
         return redissonClient;
     }

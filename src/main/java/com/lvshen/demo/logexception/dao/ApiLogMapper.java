@@ -11,7 +11,7 @@ import java.util.List;
  * @Description api请求日志记录表
  * @date 2022/05/18
  */
-@Repository
+//@Repository
 public interface ApiLogMapper extends BaseMapper<ApiLog> {
 
     List<ApiLogVo> listApiLogVo(@Param("param") ApiLogQueryParam param);

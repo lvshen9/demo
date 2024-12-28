@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -34,7 +35,6 @@ public class RedissonClientConfig {
     private static String redisPassword;
     @Value("${spring.redis.port}")
     private static String redisPort;
-
     @Autowired
     private ApplicationContext context;
 
@@ -50,17 +50,16 @@ public class RedissonClientConfig {
     @Bean("redissonService")
     public RedissonClient getRedissonClient() {
 
-        String activeProfile = getActiveProfile();
-        Config config;
-        if ("prod".equals(activeProfile)) {
-            config = useClusterConfig();
-        } else {
-            config = useSingleConfig();
-        }
+        //String activeProfile = getActiveProfile();
+        Config config = useSingleConfig();
+        //
         return Redisson.create(config);
     }
 
     private Config useSingleConfig() {
+        redisHost = "192.168.0.111";
+        redisPassword = "1q1w1e1r";
+        redisPort = "16379";
         Config config = new Config();
         StringBuilder sb = new StringBuilder("redis://");
         sb.append(redisHost).append(":").append(redisPort);

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * @date: 2022-9-5 15:24
  * @since JDK 1.8
  */
-@Component
+//@Component
 @Slf4j
 public class ExceptionResultConsumerApplicationService implements ApplicationRunner {
 
